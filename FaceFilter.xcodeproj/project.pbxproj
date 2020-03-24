@@ -7,23 +7,30 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		170D4546242A91DB00BD37BB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170D4545242A91DB00BD37BB /* Extensions.swift */; };
+		174DE377242A0EA30095746A /* FilterControlViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174DE376242A0EA30095746A /* FilterControlViewController.swift */; };
+		174DE379242A47D30095746A /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174DE378242A47D30095746A /* AppModel.swift */; };
 		175D64162424B6BC0024CA91 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D64152424B6BC0024CA91 /* AppDelegate.swift */; };
 		175D64182424B6BC0024CA91 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D64172424B6BC0024CA91 /* SceneDelegate.swift */; };
-		175D641A2424B6BC0024CA91 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D64192424B6BC0024CA91 /* ViewController.swift */; };
+		175D641A2424B6BC0024CA91 /* FaceFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 175D64192424B6BC0024CA91 /* FaceFilterViewController.swift */; };
 		175D641D2424B6BC0024CA91 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 175D641B2424B6BC0024CA91 /* Main.storyboard */; };
 		175D641F2424B6C00024CA91 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 175D641E2424B6C00024CA91 /* Assets.xcassets */; };
 		175D64222424B6C00024CA91 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 175D64202424B6C00024CA91 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		175D64122424B6BC0024CA91 /* FaceFilter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FaceFilter.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		170D4545242A91DB00BD37BB /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		174DE376242A0EA30095746A /* FilterControlViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterControlViewController.swift; sourceTree = "<group>"; };
+		174DE378242A47D30095746A /* AppModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppModel.swift; sourceTree = "<group>"; };
+		175D64122424B6BC0024CA91 /* Face Filter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Face Filter.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		175D64152424B6BC0024CA91 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		175D64172424B6BC0024CA91 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		175D64192424B6BC0024CA91 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		175D64192424B6BC0024CA91 /* FaceFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceFilterViewController.swift; sourceTree = "<group>"; };
 		175D641C2424B6BC0024CA91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		175D641E2424B6C00024CA91 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		175D64212424B6C00024CA91 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		175D64232424B6C00024CA91 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		17D93AEE242ABF3F006C2DD8 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -40,6 +47,7 @@
 		175D64092424B6BC0024CA91 = {
 			isa = PBXGroup;
 			children = (
+				17D93AEE242ABF3F006C2DD8 /* README.md */,
 				175D64142424B6BC0024CA91 /* FaceFilter */,
 				175D64132424B6BC0024CA91 /* Products */,
 			);
@@ -48,7 +56,7 @@
 		175D64132424B6BC0024CA91 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				175D64122424B6BC0024CA91 /* FaceFilter.app */,
+				175D64122424B6BC0024CA91 /* Face Filter.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -58,7 +66,10 @@
 			children = (
 				175D64152424B6BC0024CA91 /* AppDelegate.swift */,
 				175D64172424B6BC0024CA91 /* SceneDelegate.swift */,
-				175D64192424B6BC0024CA91 /* ViewController.swift */,
+				174DE378242A47D30095746A /* AppModel.swift */,
+				170D4545242A91DB00BD37BB /* Extensions.swift */,
+				175D64192424B6BC0024CA91 /* FaceFilterViewController.swift */,
+				174DE376242A0EA30095746A /* FilterControlViewController.swift */,
 				175D641B2424B6BC0024CA91 /* Main.storyboard */,
 				175D641E2424B6C00024CA91 /* Assets.xcassets */,
 				175D64202424B6C00024CA91 /* LaunchScreen.storyboard */,
@@ -84,7 +95,7 @@
 			);
 			name = FaceFilter;
 			productName = FaceFilter;
-			productReference = 175D64122424B6BC0024CA91 /* FaceFilter.app */;
+			productReference = 175D64122424B6BC0024CA91 /* Face Filter.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -138,9 +149,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				175D641A2424B6BC0024CA91 /* ViewController.swift in Sources */,
+				174DE379242A47D30095746A /* AppModel.swift in Sources */,
+				170D4546242A91DB00BD37BB /* Extensions.swift in Sources */,
+				175D641A2424B6BC0024CA91 /* FaceFilterViewController.swift in Sources */,
 				175D64162424B6BC0024CA91 /* AppDelegate.swift in Sources */,
 				175D64182424B6BC0024CA91 /* SceneDelegate.swift in Sources */,
+				174DE377242A0EA30095746A /* FilterControlViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -287,14 +301,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8CC95REUG;
 				INFOPLIST_FILE = FaceFilter/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.FaceFilter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Face Filter";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -305,14 +320,15 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = P8CC95REUG;
 				INFOPLIST_FILE = FaceFilter/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.yourcompany.FaceFilter;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "Face Filter";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
