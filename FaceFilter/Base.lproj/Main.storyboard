@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16095" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ETi-QW-GSb">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="ETi-QW-GSb">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16084.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Face Filter-->
+        <!--FaceFilter-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="FaceFilterViewController" customModule="FaceFilter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="FaceFilterViewController" customModule="Face_Filter" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -44,12 +44,19 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Face Filter" id="xrF-jI-EyF">
-                        <barButtonItem key="leftBarButtonItem" title="Choose photo" image="photo.on.rectangle" catalog="system" id="Awz-5d-V9w">
-                            <connections>
-                                <action selector="chooseImage" destination="BYZ-38-t0r" id="AaV-lo-5om"/>
-                            </connections>
-                        </barButtonItem>
+                    <navigationItem key="navigationItem" title="FaceFilter" id="xrF-jI-EyF">
+                        <leftBarButtonItems>
+                            <barButtonItem title="Choose photo" image="photo.on.rectangle" catalog="system" id="Awz-5d-V9w">
+                                <connections>
+                                    <action selector="chooseImage" destination="BYZ-38-t0r" id="AaV-lo-5om"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Camera" image="camera" catalog="system" id="K2T-6w-U1N">
+                                <connections>
+                                    <action selector="takePhoto" destination="BYZ-38-t0r" id="MMM-Ku-yhw"/>
+                                </connections>
+                            </barButtonItem>
+                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem title="Options" image="gear" catalog="system" id="cg4-c0-18I">
                                 <connections>
@@ -75,7 +82,7 @@
         <!--Filter Control View Controller-->
         <scene sceneID="cWi-fY-I44">
             <objects>
-                <viewController id="GXb-PJ-UoL" customClass="FilterControlViewController" customModule="FaceFilter" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="GXb-PJ-UoL" customClass="FilterControlViewController" customModule="Face_Filter" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CRy-6Q-J8j">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="548"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -224,6 +231,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="camera" catalog="system" width="128" height="96"/>
         <image name="gear" catalog="system" width="128" height="119"/>
         <image name="photo.on.rectangle" catalog="system" width="128" height="98"/>
         <image name="square.and.arrow.up" catalog="system" width="115" height="128"/>

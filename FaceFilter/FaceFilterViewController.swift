@@ -20,7 +20,6 @@ class FaceFilterViewController: UIViewController {
     private lazy var picker: UIImagePickerController = {
         let picker = UIImagePickerController()
         picker.delegate = self
-        picker.sourceType = .photoLibrary
         return picker
     }()
 
@@ -32,8 +31,6 @@ class FaceFilterViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
-        chooseImage()
     }
 
     public override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -101,7 +98,19 @@ class FaceFilterViewController: UIViewController {
 
     // Action used to trigger the display of the Image Picker
     @IBAction func chooseImage() {
+        picker.sourceType = .photoLibrary
         self.present(picker, animated: true, completion: nil)
+    }
+
+    // Action used to trigger the display of the Image Picker
+    @IBAction func takePhoto() {
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.sourceType = .camera
+            self.present(picker, animated: true, completion: nil)
+        }
+        else {
+            print("Sorry cant take picture")
+        }
     }
 
     // Action used to trigger the display of the "share sheet"
@@ -145,9 +154,9 @@ extension FaceFilterViewController: UIImagePickerControllerDelegate, UINavigatio
 
         showImage(nil)
         picker.dismiss(animated: true, completion: {
-            var image = info[UIImagePickerController.InfoKey.editedImage] as? UIImage
+            var image = info[.editedImage] as? UIImage
             if image == nil {
-                image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+                image = info[.originalImage] as? UIImage
             }
             if let image = image {
                 self.processImage(image)
