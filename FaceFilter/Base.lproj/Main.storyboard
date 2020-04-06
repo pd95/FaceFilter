@@ -131,7 +131,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.25" minValue="0.0" maxValue="3" translatesAutoresizingMaskIntoConstraints="NO" id="TLm-cf-hSS">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.25" minValue="0.0" maxValue="3" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TLm-cf-hSS">
                                 <rect key="frame" x="16" y="274" width="290" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="29" id="Hmb-LW-TMv"/>
@@ -147,6 +147,13 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lGc-tD-Xrr">
+                                <rect key="frame" x="60" y="319" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="Ii3-da-zVX"/>
+                                    <constraint firstAttribute="height" constant="200" id="wat-gt-Gz6"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -154,7 +161,9 @@
                             <constraint firstItem="mJS-XR-jDD" firstAttribute="top" secondItem="wq0-tr-rLy" secondAttribute="bottom" constant="19" id="4BB-k3-MHx"/>
                             <constraint firstItem="TLm-cf-hSS" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="18" id="9Mg-yg-dEP"/>
                             <constraint firstItem="b5j-nj-kYd" firstAttribute="leading" secondItem="CRy-6Q-J8j" secondAttribute="leadingMargin" id="AHj-Eh-jzn"/>
+                            <constraint firstItem="lGc-tD-Xrr" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="16" id="BDv-6L-HKu"/>
                             <constraint firstItem="wq0-tr-rLy" firstAttribute="top" secondItem="qtV-Wu-KRw" secondAttribute="bottom" constant="8" id="Bsd-5C-k0v"/>
+                            <constraint firstItem="n3U-X3-uz6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lGc-tD-Xrr" secondAttribute="trailing" constant="16" id="Cw2-uA-QHT"/>
                             <constraint firstItem="VrZ-QB-b9w" firstAttribute="firstBaseline" secondItem="mJS-XR-jDD" secondAttribute="firstBaseline" id="DBx-Qy-7JE"/>
                             <constraint firstItem="TLm-cf-hSS" firstAttribute="trailing" secondItem="N4Z-p2-wPF" secondAttribute="trailing" id="Dxu-gM-Hp2"/>
                             <constraint firstItem="N4Z-p2-wPF" firstAttribute="top" secondItem="b5j-nj-kYd" secondAttribute="bottom" constant="8" id="Iod-vz-1eg"/>
@@ -163,8 +172,10 @@
                             <constraint firstItem="b5j-nj-kYd" firstAttribute="leading" secondItem="N4Z-p2-wPF" secondAttribute="leading" id="Z7I-gy-XEZ"/>
                             <constraint firstItem="N4Z-p2-wPF" firstAttribute="leading" secondItem="qtV-Wu-KRw" secondAttribute="leading" id="ZTp-XU-z8u"/>
                             <constraint firstItem="TLm-cf-hSS" firstAttribute="top" secondItem="mJS-XR-jDD" secondAttribute="bottom" constant="8" id="aF4-h8-ExN"/>
+                            <constraint firstItem="lGc-tD-Xrr" firstAttribute="centerX" secondItem="CRy-6Q-J8j" secondAttribute="centerX" id="azk-7A-lw8"/>
                             <constraint firstItem="D12-tP-mwk" firstAttribute="leading" secondItem="qtV-Wu-KRw" secondAttribute="trailing" constant="8" id="bzN-Rp-OJt"/>
                             <constraint firstItem="b5j-nj-kYd" firstAttribute="trailing" secondItem="CRy-6Q-J8j" secondAttribute="trailingMargin" id="dn7-fe-s6h"/>
+                            <constraint firstItem="lGc-tD-Xrr" firstAttribute="top" secondItem="TLm-cf-hSS" secondAttribute="bottom" constant="16" id="fwV-Cf-C1s"/>
                             <constraint firstItem="mJS-XR-jDD" firstAttribute="leading" secondItem="N4Z-p2-wPF" secondAttribute="leading" id="hWF-OQ-C3u"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="D12-tP-mwk" secondAttribute="trailing" priority="750" constant="20" symbolic="YES" id="jDX-j5-cj3"/>
                             <constraint firstItem="wq0-tr-rLy" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="18" id="ljI-jN-fGy"/>
@@ -182,6 +193,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="facePreview" destination="lGc-tD-Xrr" id="EAX-If-ekr"/>
                         <outlet property="filterSegmentControl" destination="N4Z-p2-wPF" id="Yas-hk-HIh"/>
                         <outlet property="inputScale" destination="wq0-tr-rLy" id="o1f-NA-4km"/>
                         <outlet property="inputScaleLabel" destination="D12-tP-mwk" id="hGZ-l1-lSC"/>
