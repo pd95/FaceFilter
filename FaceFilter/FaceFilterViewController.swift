@@ -16,6 +16,7 @@ class FaceFilterViewController: UIViewController {
     @IBOutlet var imageView: UIImageView!
 
     private let model = AppModel.shared
+    private var pickingImage = false
 
     private lazy var picker: UIImagePickerController = {
         let picker = UIImagePickerController()
@@ -31,6 +32,9 @@ class FaceFilterViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if !pickingImage {
+            chooseImage()
+        }
     }
 
     public override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -98,6 +102,7 @@ class FaceFilterViewController: UIViewController {
 
     // Action used to trigger the display of the Image Picker
     @IBAction func chooseImage() {
+        pickingImage = true
         picker.sourceType = .photoLibrary
         self.present(picker, animated: true, completion: nil)
     }
@@ -105,6 +110,7 @@ class FaceFilterViewController: UIViewController {
     // Action used to trigger the display of the Image Picker
     @IBAction func takePhoto() {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            pickingImage = true
             picker.sourceType = .camera
             self.present(picker, animated: true, completion: nil)
         }
@@ -161,7 +167,12 @@ extension FaceFilterViewController: UIImagePickerControllerDelegate, UINavigatio
             if let image = image {
                 self.processImage(image)
             }
+            self.pickingImage = false
         })
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        pickingImage = false
     }
 }
 
