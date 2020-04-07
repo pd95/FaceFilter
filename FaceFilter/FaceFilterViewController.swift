@@ -173,6 +173,7 @@ extension FaceFilterViewController: UIImagePickerControllerDelegate, UINavigatio
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         pickingImage = false
+        picker.dismiss(animated: true, completion: nil)
     }
 }
 
