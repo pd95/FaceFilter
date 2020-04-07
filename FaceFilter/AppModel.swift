@@ -19,7 +19,7 @@ struct FilterSelection {
 }
 
 public class AppModel {
-    static let shared = AppModel()
+    public static let shared = AppModel()
     
     struct DefaultKeys {
         static let currentFilter = "currentFilter"
@@ -74,11 +74,16 @@ public class AppModel {
     var outputImage: CIImage?
     var maskAccumulator: CIImageAccumulator?
 
-    var detectedFaceRect = [CGRect]()
+    public var detectedFaceRect = [CGRect]()
 
     // This method prepares the given UIImage and extracts the location (=Rects) of the faces
-    func detectFaces(in image: UIImage) {
-        inputImage = CIImage(cgImage: image.cgImage!).oriented(CGImagePropertyOrientation(image.imageOrientation))
+    public func detectFaces(in image: UIImage) {
+        if let ciImage = image.ciImage {
+            inputImage = ciImage
+        }
+        else {
+            inputImage = CIImage(cgImage: image.cgImage!).oriented(CGImagePropertyOrientation(image.imageOrientation))
+        }
         guard let ciImage = inputImage else {
             fatalError("Unable to access image data")
         }
@@ -114,7 +119,7 @@ public class AppModel {
     }
     
     // Applies the face locations to an empty mask (=CIImageAccumulator)
-    func calculateMask() {
+    public func calculateMask() {
         let size = inputImage!.extent.size
         maskAccumulator = CIImageAccumulator(extent: CGRect(x: 0, y: 0, width: size.width, height: size.height), format: CIFormat.ARGB8)
         guard let maskAccumulator = maskAccumulator else {
@@ -138,7 +143,7 @@ public class AppModel {
     
     
     // Apply the user selected filter parameters on the input image and recombines the resulting image using the pre-calculated mask
-    func blurHeads() {
+    public func blurHeads() {
 
         let ciImage = inputImage!
 
@@ -150,5 +155,9 @@ public class AppModel {
         compositeFilter.maskImage = maskAccumulator?.image()
 
         outputImage = compositeFilter.outputImage
+    }
+    
+    public func resultImage() -> UIImage {
+        return UIImage(ciImage: outputImage!)
     }
 }
