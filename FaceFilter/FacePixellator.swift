@@ -80,8 +80,8 @@ public class FacePixellator {
 
         // For the preview the crop area must be slightly bigger
         let f : CGFloat = 0.4
-        let dx = -faceRect.size.width * (ceil(face.overshoot/f) * f + 0.1)
-        let dy = -faceRect.size.height * (ceil(face.overshoot/f) * f + 0.1)
+        let dx = -faceRect.size.width * (ceil((face.overshoot + 0.01)/f) * f + 0.1)
+        let dy = -faceRect.size.height * (ceil((face.overshoot + 0.01)/f) * f + 0.1)
         let cropRect = faceRect.insetBy(dx: dx, dy: dy)
 
         // In the cropped image the face somewhere else
