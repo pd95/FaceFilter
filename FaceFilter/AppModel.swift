@@ -38,7 +38,8 @@ public class AppModel {
     let allowedFilter = [
         FilterSelection(filterName: "CIGaussianBlur", parameterName: "inputRadius", defaultValue: 10, minimumValue: 0, maximumValue: 100),
         FilterSelection(filterName: "CIPixellate", parameterName: "inputScale", defaultValue: 20, minimumValue: 1, maximumValue: 100),
-        FilterSelection(filterName: "CIHexagonalPixellate", parameterName: "inputScale", defaultValue: 20, minimumValue: 1, maximumValue: 100)
+        FilterSelection(filterName: "CIHexagonalPixellate", parameterName: "inputScale", defaultValue: 20, minimumValue: 1, maximumValue: 100),
+        FilterSelection(filterName: "", parameterName: "", defaultValue: 1, minimumValue: 1, maximumValue: 1)
     ]
     
     var currentFilterIndex: Int = 1 {
@@ -147,7 +148,13 @@ public class AppModel {
 
         let ciImage = inputImage!
 
-        let blurredImage = ciImage.applyingFilter(filterName, parameters: [filterParameterName: currentParameterValue])
+        let blurredImage: CIImage
+        if filterName != "" {
+            blurredImage = ciImage.applyingFilter(filterName, parameters: [filterParameterName: currentParameterValue])
+        }
+        else {
+            blurredImage = ciImage
+        }
 
         let compositeFilter = CIFilter.blendWithMask()
         compositeFilter.backgroundImage = ciImage

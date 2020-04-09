@@ -96,9 +96,10 @@
                             <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="N4Z-p2-wPF">
                                 <rect key="frame" x="16" y="109" width="288" height="32"/>
                                 <segments>
-                                    <segment title="Gaussian Blur"/>
-                                    <segment title="Pixellate"/>
-                                    <segment title="Hexagonal Pixellate"/>
+                                    <segment title="Blur"/>
+                                    <segment title="Square"/>
+                                    <segment title="Hexagonal"/>
+                                    <segment title="None"/>
                                 </segments>
                                 <connections>
                                     <action selector="filterSelected:" destination="GXb-PJ-UoL" eventType="valueChanged" id="xhf-sG-il3"/>
@@ -131,7 +132,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.25" minValue="0.0" maxValue="3" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TLm-cf-hSS">
+                            <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.25" minValue="0.0" maxValue="2" continuous="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TLm-cf-hSS">
                                 <rect key="frame" x="16" y="274" width="290" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="29" id="Hmb-LW-TMv"/>
