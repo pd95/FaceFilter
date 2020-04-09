@@ -42,28 +42,28 @@ public class AppModel {
         FilterSelection(filterName: "", parameterName: "", defaultValue: 1, minimumValue: 1, maximumValue: 1)
     ]
     
-    var currentFilterIndex: Int = 1 {
+    public var currentFilterIndex: Int = 1 {
         didSet {
             UserDefaults.standard.set(filterName, forKey: DefaultKeys.currentFilter)
             currentParameterValue = UserDefaults.standard.value(forKey: filterName) as? Float ?? allowedFilter[currentFilterIndex].defaultValue
         }
     }
 
-    var filterName: String {
+    public var filterName: String {
         allowedFilter[currentFilterIndex].filterName
     }
 
-    var filterParameterName: String {
+    public var filterParameterName: String {
         allowedFilter[currentFilterIndex].parameterName
     }
 
-    var currentParameterValue: Float = 8 {
+    public var currentParameterValue: Float = 8 {
         didSet {
             UserDefaults.standard.set(currentParameterValue, forKey: filterName)
         }
     }
     
-    var overshootAmount: CGFloat = 0 {
+    public var overshootAmount: CGFloat = 0 {
         didSet {
             UserDefaults.standard.set(overshootAmount, forKey: DefaultKeys.overshootAmount)
         }
@@ -71,100 +71,40 @@ public class AppModel {
     
 
     // MARK: - Image processing / face detection
-    var inputImage: CIImage?
-    var outputImage: CIImage?
-    var maskAccumulator: CIImageAccumulator?
+    var facePixellator = FacePixellator()
 
-    public var detectedFaceRect = [CGRect]()
+    public var detectedFaceRect : [CGRect] {
+        let r = facePixellator.faces.map { $0.boundingBox }
+        return r
+    }
 
     // This method prepares the given UIImage and extracts the location (=Rects) of the faces
     public func detectFaces(in image: UIImage) {
-        if let ciImage = image.ciImage {
-            inputImage = ciImage
-        }
-        else {
-            inputImage = CIImage(cgImage: image.cgImage!).oriented(CGImagePropertyOrientation(image.imageOrientation))
-        }
-        guard let ciImage = inputImage else {
-            fatalError("Unable to access image data")
-        }
-
-        let faceDetection = VNDetectFaceRectanglesRequest()
-        let faceDetectionRequest = VNSequenceRequestHandler()
-        try? faceDetectionRequest.perform([faceDetection], on: ciImage)
-        if let results = faceDetection.results as? [VNFaceObservation] {
-
-            detectedFaceRect.removeAll()
-            if !results.isEmpty {
-
-                let size = ciImage.extent.size
-                var maxWxH : Float = 0
-
-                for face in results {
-                    // Calculate position in image coordinates
-                    let faceRect = CGRect(
-                        x: face.boundingBox.origin.x * size.width,
-                        y: face.boundingBox.origin.y * size.height,
-                        width: face.boundingBox.width * size.width,
-                        height: face.boundingBox.height * size.height
-                    )
-                    
-                    maxWxH = max(maxWxH, Float(faceRect.size.width), Float(faceRect.size.height))
-
-                    detectedFaceRect.append(faceRect)
-                }
-                
-                currentParameterValue = round(maxWxH / 7.0)
-            }
-        }
+        facePixellator = FacePixellator()
+        facePixellator.set(uiImage: image)
+        facePixellator.detectFaces()
     }
     
     // Applies the face locations to an empty mask (=CIImageAccumulator)
+    @available(*, deprecated, message: "Not needed anymore")
     public func calculateMask() {
-        let size = inputImage!.extent.size
-        maskAccumulator = CIImageAccumulator(extent: CGRect(x: 0, y: 0, width: size.width, height: size.height), format: CIFormat.ARGB8)
-        guard let maskAccumulator = maskAccumulator else {
-            fatalError("Unable to create mask accumulator")
-        }
-        
-        let rectGenerator = CIFilter.roundedRectangleGenerator()
-        rectGenerator.color = .white
-        rectGenerator.extent = maskAccumulator.extent
-
-        let maskCompositingFilter = CIFilter.sourceOverCompositing()
-        maskCompositingFilter.inputImage = rectGenerator.outputImage
-        maskCompositingFilter.backgroundImage = maskAccumulator.image()
-
-        for faceRect in detectedFaceRect {
-            // Slightly increase, as we do not want partial faces be seen
-            let adjustedFaceRect = faceRect.insetBy(dx: -faceRect.width * overshootAmount, dy: -faceRect.height * overshootAmount)
-            maskAccumulator.setImage(maskCompositingFilter.outputImage!, dirtyRect: adjustedFaceRect)
-        }
     }
     
     
     // Apply the user selected filter parameters on the input image and recombines the resulting image using the pre-calculated mask
+    @available(*, deprecated, message: "Not needed anymore")
     public func blurHeads() {
-
-        let ciImage = inputImage!
-
-        let blurredImage: CIImage
-        if filterName != "" {
-            blurredImage = ciImage.applyingFilter(filterName, parameters: [filterParameterName: currentParameterValue])
-        }
-        else {
-            blurredImage = ciImage
-        }
-
-        let compositeFilter = CIFilter.blendWithMask()
-        compositeFilter.backgroundImage = ciImage
-        compositeFilter.inputImage = blurredImage
-        compositeFilter.maskImage = maskAccumulator?.image()
-
-        outputImage = compositeFilter.outputImage
     }
     
     public func resultImage() -> UIImage {
-        return UIImage(ciImage: outputImage!)
+        // Apply the selected filter to all the faces
+        facePixellator.faces = facePixellator.faces.map {
+            var newFace = $0
+            newFace.setFilter(name: filterName == "" ? nil : filterName, parameter: [filterParameterName : currentParameterValue])
+            newFace.overshoot = overshootAmount
+            return newFace
+        }
+        let image = UIImage(ciImage: facePixellator.resultImage())
+        return image
     }
 }

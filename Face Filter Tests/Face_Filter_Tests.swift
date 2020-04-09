@@ -34,10 +34,6 @@ class Face_Filter_Tests: XCTestCase {
         let faceRects = model.detectedFaceRect
         XCTAssert(faceRects.count == 13, "Unexpected count of detected faces: \(faceRects.count)")
 
-        // Generate masks and blur the faces
-        model.calculateMask()
-        model.blurHeads()
-        
         // Check result image
         let resultImage = model.resultImage()
         XCTAssertNotNil(resultImage)
