@@ -17,6 +17,8 @@ class FilterControlViewController: UIViewController {
     @IBOutlet private weak var overshootAmountLabel: UILabel!
     @IBOutlet private weak var overshootAmount: UISlider!
     @IBOutlet weak var facePreview: UIImageView!
+    var previewRunning = false
+    var previewIsObsolete = false
     
     private let model = AppModel.shared
     
@@ -30,18 +32,20 @@ class FilterControlViewController: UIViewController {
     @IBAction func scaleChanged(_ sender: UISlider) {
         inputScale.value = floor(inputScale.value)
         inputScaleLabel.text = "\(inputScale.value)"
-        model.currentParameterValue = inputScale.value
-
-        model.blurHeads()
-        refreshPreview()
+        if model.currentParameterValue != inputScale.value {
+            model.currentParameterValue = inputScale.value
+            refreshPreview()
+        }
     }
 
     @IBAction func overshootAmountChanged(_ sender: UISlider) {
-        overshootAmount.value = round(overshootAmount.value * 10) / 10
-        overshootAmountLabel.text = "\(overshootAmount.value)"
-        model.overshootAmount = CGFloat(overshootAmount.value)
-        model.calculateMask()
-        refreshPreview()
+        let newValue = round(overshootAmount.value * 100) / 100
+        overshootAmount.value = newValue
+        overshootAmountLabel.text = "\(Int(newValue * 100))%"
+        if model.overshootAmount != CGFloat(newValue) {
+            model.overshootAmount = CGFloat(overshootAmount.value)
+            refreshPreview()
+        }
     }
 
     @IBAction func filterSelected(_ sender: UISegmentedControl) {
@@ -51,26 +55,28 @@ class FilterControlViewController: UIViewController {
         inputScale.value = model.currentParameterValue
         inputScaleLabel.text = "\(inputScale.value)"
         overshootAmount.value = Float(model.overshootAmount)
-        overshootAmountLabel.text = "\(overshootAmount.value)"
-        
-        model.blurHeads()
+        overshootAmountLabel.text = "\(Int(overshootAmount.value * 100))%"
+
         refreshPreview()
     }
     
     func refreshPreview() {
-        if let faceRect = model.detectedFaceRect.first, let outputImage = model.outputImage {
-            facePreview.image = nil
-            print("faceRect = \(faceRect)")
-            let size = facePreview.bounds.size
-            print("Preview size = \(size)")
-            let dx = (faceRect.size.width - size.width)/2
-            let dy = (faceRect.size.height - size.height)/2
-            print("dx = \(dx)")
-            print("dy = \(dy)")
-            let cropRect = faceRect.insetBy(dx: dx, dy: dy)
-            print("Crop size = \(cropRect)")
-            let image = outputImage.cropped(to: cropRect)
-            facePreview.image = UIImage(ciImage: image)
+        if !previewRunning {
+            previewRunning = true
+            DispatchQueue.global(qos: .userInitiated).async {
+                let previewImage = self.model.previewImage()
+                DispatchQueue.main.async {
+                    self.facePreview.image = previewImage
+                    self.previewRunning = false
+                    if self.previewIsObsolete {
+                        self.previewIsObsolete = false
+                        self.refreshPreview()
+                    }
+                }
+            }
+        }
+        else {
+            previewIsObsolete = true
         }
     }
     

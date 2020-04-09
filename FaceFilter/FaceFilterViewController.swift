@@ -77,13 +77,9 @@ class FaceFilterViewController: UIViewController {
             // The first steps are only needed once
             self.model.detectFaces(in: image)
 
-            // The bluring of the image has to be reapplied whenever the parameters change
-            self.model.calculateMask()
-            self.model.blurHeads()
-
+            let resultImage = self.model.resultImage()
             DispatchQueue.main.async {
-                let ciImage = self.model.outputImage!
-                self.showImage(UIImage(ciImage: ciImage))
+                self.showImage(resultImage)
             }
         }
     }
@@ -91,11 +87,9 @@ class FaceFilterViewController: UIViewController {
     // Updates the current image in the background, applying the filter and displaying the result
     func refreshImage() {
         DispatchQueue.global(qos: .background).async {
-            // The bluring of the image has to be reapplied whenever the parameters change
-            self.model.calculateMask()
-            self.model.blurHeads()
+            let resultImage = self.model.resultImage()
             DispatchQueue.main.async {
-                self.imageView.image = UIImage(ciImage: self.model.outputImage!)
+                self.imageView.image = resultImage
             }
         }
     }

@@ -96,7 +96,7 @@ public class AppModel {
     public func blurHeads() {
     }
     
-    public func resultImage() -> UIImage {
+    func syncSettings() {
         // Apply the selected filter to all the faces
         facePixellator.faces = facePixellator.faces.map {
             var newFace = $0
@@ -104,6 +104,19 @@ public class AppModel {
             newFace.overshoot = overshootAmount
             return newFace
         }
+    }
+    
+    public func previewImage() -> UIImage {
+        syncSettings()
+        if let face = facePixellator.faces.first {
+            let image = UIImage(ciImage: facePixellator.previewImage(for: face))
+            return image
+        }
+        return UIImage()
+    }
+    
+    public func resultImage() -> UIImage {
+        syncSettings()
         let image = UIImage(ciImage: facePixellator.resultImage())
         return image
     }
