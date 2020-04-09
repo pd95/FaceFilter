@@ -58,6 +58,7 @@ class FaceFilterViewController: UIViewController {
     
     // Displays the given image in the UIImageView and adjusts the UIScrollView
     func showImage(_ image: UIImage?) {
+        imageView.contentMode = .center
         imageView.image = image
         if let image = image {
             let svHeight = scrollView.bounds.size.height
@@ -167,6 +168,8 @@ extension FaceFilterViewController: UIImagePickerControllerDelegate, UINavigatio
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         pickingImage = false
+        imageView.contentMode = .topLeft
+        imageView.image = UIImage(named: "Choose-Here")
         picker.dismiss(animated: true, completion: nil)
     }
 }
