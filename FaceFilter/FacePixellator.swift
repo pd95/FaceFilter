@@ -90,39 +90,25 @@ public class FacePixellator {
             .transformed(by: .init(translationX: -cropRect.minX, y: -cropRect.minY))
 
         // Apply selected filter with parameters
-        let filteredImage: CIImage
+        let outputImage : CIImage
         if let filterName = face.filterName {
-            filteredImage = previewInput.applyingFilter(filterName, parameters: face.filterParameter)
+            
+            let adjustedFaceRect = CGRect(origin: previewOrigin, size: faceRect.size)
+                .insetBy(dx: -faceRect.width * face.overshoot,
+                         dy: -faceRect.height * face.overshoot)
+            
+            let filteredImage = previewInput
+                .cropped(to: adjustedFaceRect)
+                .applyingFilter(filterName, parameters: face.filterParameter)
+
+            outputImage = filteredImage
+                .composited(over: previewInput)
+                .cropped(to: previewInput.extent)
         }
         else {
-            filteredImage = previewInput
+            outputImage = previewInput
         }
 
-        let maskAccumulator = CIImageAccumulator(extent: previewInput.extent, format: CIFormat.ARGB8)!
-
-        let rectGenerator = CIFilter.roundedRectangleGenerator()
-        rectGenerator.color = .white
-        rectGenerator.extent = previewInput.extent
-
-        let maskCompositingFilter = CIFilter.sourceOverCompositing()
-        maskCompositingFilter.inputImage = rectGenerator.outputImage
-        maskCompositingFilter.backgroundImage = maskAccumulator.image()
-
-        // Apply selected overshoot
-        let adjustedFaceRect = CGRect(origin: previewOrigin, size: faceRect.size)
-            .insetBy(dx: -faceRect.width * face.overshoot,
-                     dy: -faceRect.height * face.overshoot)
-        
-        maskAccumulator.setImage(maskCompositingFilter.outputImage!, dirtyRect: adjustedFaceRect)
-        let maskImage = maskAccumulator.image()
-
-        // Compose original and filtered image according to the mask
-        let compositeFilter = CIFilter.blendWithMask()
-        compositeFilter.backgroundImage = previewInput
-        compositeFilter.inputImage = filteredImage
-        compositeFilter.maskImage = maskImage
-        
-        let outputImage = compositeFilter.outputImage!
 
         return outputImage
     }
@@ -135,25 +121,30 @@ public class FacePixellator {
 
         var outputImage : CIImage = inputImage
         for face in faces {
-            // Calculate face position in image coordinates
-            let faceRect = CGRect(
-                x: face.boundingBox.origin.x * size.width,
-                y: face.boundingBox.origin.y * size.height,
-                width: face.boundingBox.width * size.width,
-                height: face.boundingBox.height * size.height
-            )
-            let overshoot = face.overshoot
-            let adjustedFaceRect = faceRect.insetBy(dx: -faceRect.width * overshoot, dy: -faceRect.height * overshoot)
-
-            let faceImage = inputImage.cropped(to: adjustedFaceRect)
-
             // Apply selected filter with parameters
             if let filterName = face.filterName {
+
+                // Calculate face position in image coordinates
+                let faceRect = CGRect(
+                    x: face.boundingBox.origin.x * size.width,
+                    y: face.boundingBox.origin.y * size.height,
+                    width: face.boundingBox.width * size.width,
+                    height: face.boundingBox.height * size.height
+                )
+                
+                // Apply selected overshoot
+                let overshoot = face.overshoot
+                let adjustedFaceRect = faceRect.insetBy(dx: -faceRect.width * overshoot, dy: -faceRect.height * overshoot)
+                
+                let faceImage = inputImage.cropped(to: adjustedFaceRect)
+
                 let filteredImage = faceImage.applyingFilter(filterName, parameters: face.filterParameter)
+
                 // Compose filtered and original image
                 outputImage = filteredImage.composited(over: outputImage)
             }
         }
+        outputImage = outputImage.cropped(to: inputImage.extent)
 
         return outputImage
     }
