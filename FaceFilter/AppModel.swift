@@ -96,19 +96,27 @@ public class AppModel {
     public func blurHeads() {
     }
     
-    func syncSettings() {
+    public func syncSettings(for index: Int = -1) {
         // Apply the selected filter to all the faces
-        facePixellator.faces = facePixellator.faces.map {
-            var newFace = $0
+        if index < 0 {
+            facePixellator.faces = facePixellator.faces.map {
+                var newFace = $0
+                newFace.setFilter(name: filterName == "" ? nil : filterName, parameter: [filterParameterName : currentParameterValue])
+                newFace.overshoot = overshootAmount
+                return newFace
+            }
+        }
+        else {
+            var newFace = facePixellator.faces[index]
             newFace.setFilter(name: filterName == "" ? nil : filterName, parameter: [filterParameterName : currentParameterValue])
             newFace.overshoot = overshootAmount
-            return newFace
+            facePixellator.faces[index] = newFace
         }
     }
     
-    public func previewImage() -> UIImage {
-        syncSettings()
-        if let face = facePixellator.faces.first {
+    public func previewImage(for index: Int = 0) -> UIImage {
+        if facePixellator.faces.indices.contains(index) {
+            let face = facePixellator.faces [index]
             let image = UIImage(ciImage: facePixellator.previewImage(for: face))
             return image
         }
@@ -116,7 +124,6 @@ public class AppModel {
     }
     
     public func resultImage() -> UIImage {
-        syncSettings()
         let image = UIImage(ciImage: facePixellator.resultImage())
         return image
     }

@@ -146,9 +146,12 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" translatesAutoresizingMaskIntoConstraints="NO" id="lGc-tD-Xrr">
-                                <rect key="frame" x="16" y="290" width="288" height="238"/>
-                            </imageView>
+                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="asz-sj-eHW">
+                                <rect key="frame" x="18" y="282" width="286" height="246"/>
+                                <connections>
+                                    <segue destination="co0-lP-Abn" kind="embed" identifier="embedPageViewVC" id="i0Y-RF-4mW"/>
+                                </connections>
+                            </containerView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
@@ -156,12 +159,10 @@
                             <constraint firstItem="wq0-tr-rLy" firstAttribute="trailing" secondItem="N4Z-p2-wPF" secondAttribute="trailing" id="25q-Rg-2Aw"/>
                             <constraint firstItem="N4Z-p2-wPF" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="16" id="2U5-8W-Oej"/>
                             <constraint firstItem="mJS-XR-jDD" firstAttribute="top" secondItem="wq0-tr-rLy" secondAttribute="bottom" constant="19" id="4BB-k3-MHx"/>
-                            <constraint firstItem="n3U-X3-uz6" firstAttribute="bottom" secondItem="lGc-tD-Xrr" secondAttribute="bottom" constant="20" id="51f-30-Fly"/>
+                            <constraint firstItem="asz-sj-eHW" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="18" id="7Sc-sq-agV"/>
                             <constraint firstItem="n3U-X3-uz6" firstAttribute="trailing" secondItem="N4Z-p2-wPF" secondAttribute="trailing" constant="16" id="7vb-Xe-PFx"/>
                             <constraint firstItem="TLm-cf-hSS" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="18" id="9Mg-yg-dEP"/>
-                            <constraint firstItem="lGc-tD-Xrr" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="16" id="BDv-6L-HKu"/>
                             <constraint firstItem="wq0-tr-rLy" firstAttribute="top" secondItem="qtV-Wu-KRw" secondAttribute="bottom" constant="8" id="Bsd-5C-k0v"/>
-                            <constraint firstItem="n3U-X3-uz6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="lGc-tD-Xrr" secondAttribute="trailing" constant="16" id="Cw2-uA-QHT"/>
                             <constraint firstItem="VrZ-QB-b9w" firstAttribute="firstBaseline" secondItem="mJS-XR-jDD" secondAttribute="firstBaseline" id="DBx-Qy-7JE"/>
                             <constraint firstItem="n3U-X3-uz6" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="VrZ-QB-b9w" secondAttribute="trailing" priority="750" constant="138.5" id="DRX-ne-Cv8"/>
                             <constraint firstItem="VrZ-QB-b9w" firstAttribute="leading" secondItem="mJS-XR-jDD" secondAttribute="trailing" constant="8" id="DxU-jS-Vtw"/>
@@ -169,13 +170,14 @@
                             <constraint firstItem="qtV-Wu-KRw" firstAttribute="top" secondItem="N4Z-p2-wPF" secondAttribute="bottom" constant="28" id="TzL-VE-NXZ"/>
                             <constraint firstItem="N4Z-p2-wPF" firstAttribute="leading" secondItem="qtV-Wu-KRw" secondAttribute="leading" id="ZTp-XU-z8u"/>
                             <constraint firstItem="TLm-cf-hSS" firstAttribute="top" secondItem="mJS-XR-jDD" secondAttribute="bottom" constant="8" id="aF4-h8-ExN"/>
-                            <constraint firstItem="lGc-tD-Xrr" firstAttribute="centerX" secondItem="CRy-6Q-J8j" secondAttribute="centerX" id="azk-7A-lw8"/>
                             <constraint firstItem="D12-tP-mwk" firstAttribute="leading" secondItem="qtV-Wu-KRw" secondAttribute="trailing" constant="8" id="bzN-Rp-OJt"/>
-                            <constraint firstItem="lGc-tD-Xrr" firstAttribute="top" secondItem="TLm-cf-hSS" secondAttribute="bottom" constant="16" id="fwV-Cf-C1s"/>
+                            <constraint firstItem="n3U-X3-uz6" firstAttribute="bottom" secondItem="asz-sj-eHW" secondAttribute="bottom" constant="20" id="eM8-Kb-vjI"/>
                             <constraint firstItem="mJS-XR-jDD" firstAttribute="leading" secondItem="N4Z-p2-wPF" secondAttribute="leading" id="hWF-OQ-C3u"/>
                             <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="D12-tP-mwk" secondAttribute="trailing" priority="750" constant="20" symbolic="YES" id="jDX-j5-cj3"/>
                             <constraint firstItem="wq0-tr-rLy" firstAttribute="leading" secondItem="n3U-X3-uz6" secondAttribute="leading" constant="18" id="ljI-jN-fGy"/>
                             <constraint firstItem="D12-tP-mwk" firstAttribute="firstBaseline" secondItem="qtV-Wu-KRw" secondAttribute="firstBaseline" id="nwf-Dr-tnw"/>
+                            <constraint firstItem="n3U-X3-uz6" firstAttribute="trailing" secondItem="asz-sj-eHW" secondAttribute="trailing" constant="16" id="vwY-h2-lLe"/>
+                            <constraint firstItem="asz-sj-eHW" firstAttribute="top" secondItem="TLm-cf-hSS" secondAttribute="bottom" constant="8" id="zca-r7-Gxj"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="n3U-X3-uz6"/>
                     </view>
@@ -187,7 +189,6 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="facePreview" destination="lGc-tD-Xrr" id="EAX-If-ekr"/>
                         <outlet property="filterSegmentControl" destination="N4Z-p2-wPF" id="Yas-hk-HIh"/>
                         <outlet property="inputScale" destination="wq0-tr-rLy" id="o1f-NA-4km"/>
                         <outlet property="inputScaleLabel" destination="D12-tP-mwk" id="hGZ-l1-lSC"/>
@@ -234,6 +235,30 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SY1-zb-2jq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2238.75" y="111.97183098591549"/>
+        </scene>
+        <!--Page View Controller-->
+        <scene sceneID="0Zg-nO-xh1">
+            <objects>
+                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="max" id="co0-lP-Abn" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xp5-hy-hAn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="4283" y="92"/>
+        </scene>
+        <!--Preview Image View Controller-->
+        <scene sceneID="aaF-x6-IKs">
+            <objects>
+                <viewController storyboardIdentifier="PreviewImageViewController" id="Kdz-rD-Amz" customClass="PreviewImageViewController" customModule="Face_Filter" customModuleProvider="target" sceneMemberID="viewController">
+                    <imageView key="view" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" id="FUw-P4-sH6">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    </imageView>
+                    <connections>
+                        <outlet property="imageView" destination="FUw-P4-sH6" id="2xd-SH-Ojo"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uxA-SN-PLC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5068" y="112"/>
         </scene>
     </scenes>
     <resources>
