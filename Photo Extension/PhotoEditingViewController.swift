@@ -10,65 +10,24 @@ import UIKit
 import Photos
 import PhotosUI
 
-class PhotoEditingViewController: UIViewController, PHContentEditingController {
+class PhotoEditingViewController: UIViewController, PHContentEditingController, UIScrollViewDelegate {
 
-    enum ProcessingState: CustomStringConvertible {
-        case initial, loading, detectingFaces, applyingDefaultFilters, editing, composingResultImage, done
-        
-        var description: String {
-            switch self {
-                case .initial:
-                    return "Initial"
-                case .loading:
-                    return "Loading"
-                case .detectingFaces:
-                    return "Detecting Faces"
-                case .applyingDefaultFilters:
-                    return "Applying default filters"
-                case .editing:
-                    return "Editing"
-                case .composingResultImage:
-                    return "Composing result image"
-                case .done:
-                    return "Done"
-            }
-        }
-    }
-    
+    @IBOutlet weak var imageView: UIImageView!
+    var pixellator: FacePixellator!
     var input: PHContentEditingInput?
-    @IBOutlet weak var processingStateLabel: UILabel!
-    
-    var state : ProcessingState = .initial {
-        didSet {
-            processingStateLabel.text = "\(state)..."
-            if state == .editing {
-                // Animate label to invisibility
-                if !self.processingStateLabel.isHidden {
-                    UIView.animate(withDuration: 1, animations: {
-                        self.processingStateLabel.alpha = 0
-                    }, completion: { _ in
-                        self.processingStateLabel.alpha = 1
-                        self.processingStateLabel.isHidden = true
-                    })
-                }
-            }
-            else {
-                // Animate label back to visibility
-                if self.processingStateLabel.isHidden {
-                    self.processingStateLabel.isHidden = false
-                    UIView.animate(withDuration: 0.3, animations: {
-                        self.processingStateLabel.alpha = 1
-                    })
-                }
-            }
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        state = .loading
+        UIBarButtonItem.appearance().tintColor = .systemYellow
+
+        UINavigationBar.appearance().tintColor = .systemYellow
+        UINavigationBar.appearance().barTintColor = .systemYellow
+        UINavigationBar.appearance().backgroundColor = .red
+
+        navigationController?.navigationBar.tintColor = .systemYellow
+        navigationController?.navigationBar.barTintColor = .systemYellow
     }
         
     // MARK: - PHContentEditingController
@@ -85,36 +44,54 @@ class PhotoEditingViewController: UIViewController, PHContentEditingController {
         // If you returned false, the contentEditingInput has past edits "baked in".
         input = contentEditingInput
 
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-            self.state = .detectingFaces
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                self.state = .applyingDefaultFilters
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    self.state = .editing
-                }
-            }
-        }
+        let displayImage = contentEditingInput.displaySizeImage!
+        imageView.image = displayImage
+        
+        pixellator = FacePixellator()
+        pixellator.set(uiImage: displayImage)
+        pixellator.detectFaces()
+        
+        let resultImage = pixellator.resultImage()
+
+        self.imageView.image = UIImage(ciImage: resultImage)
     }
     
     func finishContentEditing(completionHandler: @escaping ((PHContentEditingOutput?) -> Void)) {
         // Update UI to reflect that editing has finished and output is being rendered.
-        state = .composingResultImage
 
         // Render and provide output on a background queue.
-        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            
+            self.pixellator.set(imageFromUrl: self.input!.fullSizeImageURL!)
+
             // Create editing output from the editing input.
             let output = PHContentEditingOutput(contentEditingInput: self.input!)
             
             // Provide new adjustments and render output to given location.
-            // output.adjustmentData = <#new adjustment data#>
-            // let renderedJPEGData = <#output JPEG#>
-            // renderedJPEGData.writeToURL(output.renderedContentURL, atomically: true)
-            
+            if let archivedData = try? NSKeyedArchiver.archivedData(withRootObject: "CIPixellate", requiringSecureCoding: false) {
+
+                let adjustmentData = PHAdjustmentData(
+                    formatIdentifier: "com.yourcompany.face-filter",
+                    formatVersion: "1.0",
+                    data: archivedData)
+
+                output.adjustmentData = adjustmentData
+            }
+
+            let resultImage = self.pixellator.resultImage()
+            do {
+                let resultUIImage = UIImage(ciImage: resultImage)
+                let renderedJPEGData = resultUIImage.jpegData(compressionQuality: 0.8)!
+                try renderedJPEGData.write(to: output.renderedContentURL, options: [.atomic])
+            } catch {
+                print("Error writing JPEG: \(error)")
+            }
+    
             // Call completion handler to commit edit to Photos.
             completionHandler(output)
             
             // Clean up temporary files, etc.
-            self.state = .done
+            self.pixellator = nil
         }
     }
     
@@ -127,6 +104,13 @@ class PhotoEditingViewController: UIViewController, PHContentEditingController {
     func cancelContentEditing() {
         // Clean up temporary files, etc.
         // May be called after finishContentEditingWithCompletionHandler: while you prepare output.
+        self.pixellator = nil
     }
 
+    // MARK: - Scroll View Delegate protocol
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        imageView
+    }
 }
+
+

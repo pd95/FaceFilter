@@ -23,6 +23,10 @@
 		17F3FED0243CE71700736FDB /* Photo Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 17F3FEC1243CE71700736FDB /* Photo Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		17F3FEEA243CEDB100736FDB /* Face_Filter_Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17F3FEE9243CEDB100736FDB /* Face_Filter_Tests.swift */; };
 		17F3FEF2243CF0C100736FDB /* test_classic_composer.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 17F3FEF1243CF0C100736FDB /* test_classic_composer.jpg */; };
+		17F3FEF3243D3EE300736FDB /* AppModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 174DE378242A47D30095746A /* AppModel.swift */; };
+		17F3FEF4243D41FE00736FDB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 170D4545242A91DB00BD37BB /* Extensions.swift */; };
+		17FAB5F9243F0E18002D1C12 /* FacePixellator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FAB5F8243F0E18002D1C12 /* FacePixellator.swift */; };
+		17FAB5FA243F0E4F002D1C12 /* FacePixellator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17FAB5F8243F0E18002D1C12 /* FacePixellator.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +83,7 @@
 		17F3FEE9243CEDB100736FDB /* Face_Filter_Tests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Face_Filter_Tests.swift; sourceTree = "<group>"; };
 		17F3FEEB243CEDB100736FDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		17F3FEF1243CF0C100736FDB /* test_classic_composer.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = test_classic_composer.jpg; sourceTree = "<group>"; };
+		17FAB5F8243F0E18002D1C12 /* FacePixellator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacePixellator.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -136,6 +141,7 @@
 				175D64152424B6BC0024CA91 /* AppDelegate.swift */,
 				175D64172424B6BC0024CA91 /* SceneDelegate.swift */,
 				174DE378242A47D30095746A /* AppModel.swift */,
+				17FAB5F8243F0E18002D1C12 /* FacePixellator.swift */,
 				170D4545242A91DB00BD37BB /* Extensions.swift */,
 				175D64192424B6BC0024CA91 /* FaceFilterViewController.swift */,
 				174DE376242A0EA30095746A /* FilterControlViewController.swift */,
@@ -313,6 +319,7 @@
 				170D4546242A91DB00BD37BB /* Extensions.swift in Sources */,
 				175D641A2424B6BC0024CA91 /* FaceFilterViewController.swift in Sources */,
 				175D64162424B6BC0024CA91 /* AppDelegate.swift in Sources */,
+				17FAB5F9243F0E18002D1C12 /* FacePixellator.swift in Sources */,
 				175D64182424B6BC0024CA91 /* SceneDelegate.swift in Sources */,
 				174DE377242A0EA30095746A /* FilterControlViewController.swift in Sources */,
 			);
@@ -323,6 +330,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				17F3FEC9243CE71700736FDB /* PhotoEditingViewController.swift in Sources */,
+				17F3FEF4243D41FE00736FDB /* Extensions.swift in Sources */,
+				17FAB5FA243F0E4F002D1C12 /* FacePixellator.swift in Sources */,
+				17F3FEF3243D3EE300736FDB /* AppModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -46,6 +46,26 @@ class Face_Filter_Tests: XCTestCase {
         model.detectFaces(in: resultImage)
         XCTAssert(model.detectedFaceRect.count == 0, "Unexpected count of detected faces: \(model.detectedFaceRect.count)")
     }
+    
+    func testFacePixellator() {
+        // fetch testing image
+        let bundle = Bundle(for: type(of: self))
+        let testImageUrl = bundle.url(forResource: "test_classic_composer", withExtension: "jpg")!
+
+        let pixellator = FacePixellator()
+        pixellator.set(imageFromUrl: testImageUrl)
+        pixellator.detectFaces()
+        
+        let faceCount = pixellator.faces.count
+        XCTAssert(faceCount == 13, "Unexpected count of detected faces: \(faceCount)")
+        
+        let face = pixellator.faces[0]
+        let preview = pixellator.previewImage(for: face)
+        
+        let result = pixellator.resultImage()
+        let resultUiImage = UIImage(ciImage: result)
+
+    }
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
