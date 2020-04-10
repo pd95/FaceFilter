@@ -102,6 +102,7 @@ public class AppModel {
     // This method prepares the given UIImage and extracts the location (=Rects) of the faces
     public func detectFaces(in image: UIImage) {
         facePixellator = FacePixellator()
+        previewImageCache.removeAll()
         facePixellator.set(uiImage: image)
         facePixellator.detectFaces()
         
