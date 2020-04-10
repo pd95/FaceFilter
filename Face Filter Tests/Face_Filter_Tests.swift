@@ -31,16 +31,17 @@ class Face_Filter_Tests: XCTestCase {
         
         // Test face detection
         model.detectFaces(in: image)
-        let faceRects = model.detectedFaceRect
-        XCTAssert(faceRects.count == 13, "Unexpected count of detected faces: \(faceRects.count)")
+        XCTAssert(model.numberOfFaces == 13, "Unexpected count of detected faces: \(model.numberOfFaces)")
 
+        model.currentFilterIndex = 0 // Use Gaussian blur
+        
         // Check result image
         let resultImage = model.resultImage()
         XCTAssertNotNil(resultImage)
 
         // Test face detection on result image: no faces should be detected
         model.detectFaces(in: resultImage)
-        XCTAssert(model.detectedFaceRect.count == 0, "Unexpected count of detected faces: \(model.detectedFaceRect.count)")
+        XCTAssert(model.numberOfFaces == 0, "Unexpected count of detected faces: \(model.numberOfFaces)")
     }
     
     func testFacePixellator() {
@@ -62,12 +63,4 @@ class Face_Filter_Tests: XCTestCase {
         let resultUiImage = UIImage(ciImage: result)
 
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
-
 }

@@ -18,13 +18,7 @@ public class FacePixellator {
         
         public var overshoot: CGFloat = 0.0
         
-        public var filterName: String? = nil
-        public var filterParameter: [String: Any] = [:]
-
-        public mutating func setFilter(name: String?, parameter: [String: Any] = [:]) {
-            filterName = name
-            filterParameter = parameter
-        }
+        public var filter: CIFilter? = nil
     }
     
     var inputImage: CIImage = .init()
@@ -60,7 +54,7 @@ public class FacePixellator {
             if !results.isEmpty {
                 for face in results {
                     // Create Face structure with preview image
-                    faces.append(FilteredFace(boundingBox: face.boundingBox, filterName: "CIPixellate"))
+                    faces.append(FilteredFace(boundingBox: face.boundingBox, filter: CIFilter.pixellate()))
                 }
             }
         }
@@ -92,15 +86,15 @@ public class FacePixellator {
 
         // Apply selected filter with parameters
         let outputImage : CIImage
-        if let filterName = face.filterName {
+        if let filter = face.filter {
             
             let adjustedFaceRect = CGRect(origin: previewOrigin, size: faceRect.size)
                 .insetBy(dx: -faceRect.width * face.overshoot,
                          dy: -faceRect.height * face.overshoot)
             
-            let filteredImage = previewInput
+            filter.setValue(previewInput, forKey: kCIInputImageKey)
+            let filteredImage = filter.outputImage!
                 .cropped(to: adjustedFaceRect)
-                .applyingFilter(filterName, parameters: face.filterParameter)
 
             outputImage = filteredImage
                 .composited(over: previewInput)
@@ -123,7 +117,7 @@ public class FacePixellator {
         var outputImage : CIImage = inputImage
         for face in faces {
             // Apply selected filter with parameters
-            if let filterName = face.filterName {
+            if let filter = face.filter {
 
                 // Calculate face position in image coordinates
                 let faceRect = CGRect(
@@ -139,7 +133,8 @@ public class FacePixellator {
                 
                 let faceImage = inputImage.cropped(to: adjustedFaceRect)
 
-                let filteredImage = faceImage.applyingFilter(filterName, parameters: face.filterParameter)
+                filter.setValue(faceImage, forKey: kCIInputImageKey)
+                let filteredImage = filter.outputImage!
 
                 // Compose filtered and original image
                 outputImage = filteredImage.composited(over: outputImage)

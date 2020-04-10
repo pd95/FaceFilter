@@ -14,6 +14,7 @@ class FaceFilterViewController: UIViewController {
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet weak var filterOptionsButton: UIBarButtonItem!
 
     private let model = AppModel.shared
     private var pickingImage = false
@@ -81,6 +82,7 @@ class FaceFilterViewController: UIViewController {
             let resultImage = self.model.resultImage()
             DispatchQueue.main.async {
                 self.showImage(resultImage)
+                self.filterOptionsButton.isEnabled =  self.model.numberOfFaces > 0
             }
         }
     }
@@ -170,6 +172,7 @@ extension FaceFilterViewController: UIImagePickerControllerDelegate, UINavigatio
         pickingImage = false
         imageView.contentMode = .topLeft
         imageView.image = UIImage(named: "Choose-Here")
+        filterOptionsButton.isEnabled = false
         picker.dismiss(animated: true, completion: nil)
     }
 }

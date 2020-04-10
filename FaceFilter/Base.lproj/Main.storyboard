@@ -62,7 +62,7 @@
                             </barButtonItem>
                         </leftBarButtonItems>
                         <rightBarButtonItems>
-                            <barButtonItem title="Options" image="gear" catalog="system" id="cg4-c0-18I">
+                            <barButtonItem enabled="NO" title="Options" image="gear" catalog="system" id="cg4-c0-18I">
                                 <connections>
                                     <segue destination="dhZ-sa-dej" kind="presentation" identifier="showFilterControl" id="6sU-Cw-Vw2"/>
                                 </connections>
@@ -75,6 +75,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="filterOptionsButton" destination="cg4-c0-18I" id="dNP-Sz-NVg"/>
                         <outlet property="imageView" destination="FRS-F4-IFS" id="xG2-7L-gIM"/>
                         <outlet property="scrollView" destination="2ck-vj-aSQ" id="LVp-8N-COR"/>
                     </connections>
@@ -239,7 +240,7 @@
         <!--Page View Controller-->
         <scene sceneID="0Zg-nO-xh1">
             <objects>
-                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="max" id="co0-lP-Abn" sceneMemberID="viewController"/>
+                <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="max" doubleSided="YES" id="co0-lP-Abn" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xp5-hy-hAn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4283" y="92"/>

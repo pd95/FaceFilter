@@ -27,11 +27,6 @@ public class AppModel {
     }
     
     private init() {
-        if let filterName = UserDefaults.standard.value(forKey: DefaultKeys.currentFilter) as? String {
-            currentFilterIndex = allowedFilter.firstIndex { $0.filterName == filterName } ?? 1
-            currentParameterValue = UserDefaults.standard.value(forKey: filterName) as? Float ?? allowedFilter[currentFilterIndex].defaultValue
-            overshootAmount = UserDefaults.standard.value(forKey: DefaultKeys.overshootAmount) as? CGFloat ?? 0
-        }
     }
     
     // MARK: - Current filter selection and parameter handling
@@ -42,30 +37,56 @@ public class AppModel {
         FilterSelection(filterName: "", parameterName: "", defaultValue: 1, minimumValue: 1, maximumValue: 1)
     ]
     
-    public var currentFilterIndex: Int = 1 {
-        didSet {
+    public var currentFilterIndex: Int {
+        get {
+            allowedFilter.firstIndex { $0.filterName == filterName }!
+        }
+        set {
+            let filterName = allowedFilter[newValue].filterName
+            if facePixellator.faces.indices.contains(currentFace) {
+                facePixellator.faces[currentFace].filter = CIFilter(name: filterName)
+            }
+            else {
+                facePixellator.faces = facePixellator.faces.map {
+                    var face = $0
+                    face.filter = CIFilter(name: filterName)
+                    return face
+                }
+            }
             UserDefaults.standard.set(filterName, forKey: DefaultKeys.currentFilter)
-            currentParameterValue = UserDefaults.standard.value(forKey: filterName) as? Float ?? allowedFilter[currentFilterIndex].defaultValue
         }
     }
 
     public var filterName: String {
-        allowedFilter[currentFilterIndex].filterName
+        facePixellator.faces[currentFace].filter?.name ?? ""
     }
 
     public var filterParameterName: String {
         allowedFilter[currentFilterIndex].parameterName
     }
 
-    public var currentParameterValue: Float = 8 {
-        didSet {
-            UserDefaults.standard.set(currentParameterValue, forKey: filterName)
+    public var numberOfFaces: Int {
+        facePixellator.faces.count
+    }
+    
+    public var currentFace: Int  = -1
+
+    public var currentParameterValue: Float? {
+        get {
+            facePixellator.faces[currentFace].filter?.value(forKey: filterParameterName) as? Float
+        }
+        set {
+            facePixellator.faces[currentFace].filter?.setValue(newValue, forKey: filterParameterName)
+//            UserDefaults.standard.set(newValue, forKey: filterName)
         }
     }
     
-    public var overshootAmount: CGFloat = 0 {
-        didSet {
-            UserDefaults.standard.set(overshootAmount, forKey: DefaultKeys.overshootAmount)
+    public var overshootAmount: CGFloat {
+        get {
+            facePixellator.faces[currentFace].overshoot
+        }
+        set {
+            facePixellator.faces[currentFace].overshoot = newValue
         }
     }
     
@@ -83,41 +104,31 @@ public class AppModel {
         facePixellator = FacePixellator()
         facePixellator.set(uiImage: image)
         facePixellator.detectFaces()
-    }
-    
-    // Applies the face locations to an empty mask (=CIImageAccumulator)
-    @available(*, deprecated, message: "Not needed anymore")
-    public func calculateMask() {
-    }
-    
-    
-    // Apply the user selected filter parameters on the input image and recombines the resulting image using the pre-calculated mask
-    @available(*, deprecated, message: "Not needed anymore")
-    public func blurHeads() {
-    }
-    
-    public func syncSettings(for index: Int = -1) {
-        // Apply the selected filter to all the faces
-        if index < 0 {
-            facePixellator.faces = facePixellator.faces.map {
-                var newFace = $0
-                newFace.setFilter(name: filterName == "" ? nil : filterName, parameter: [filterParameterName : currentParameterValue])
-                newFace.overshoot = overshootAmount
-                return newFace
-            }
+        
+        // Applying default values for filter and overshoot
+        let defaultFilterName = UserDefaults.standard.value(forKey: DefaultKeys.currentFilter) as? String ?? "CIPixellate"
+        let defaultOvershoot = UserDefaults.standard.value(forKey: DefaultKeys.overshootAmount) as? CGFloat ?? 0.0
+        facePixellator.faces = facePixellator.faces.map {
+            var face = $0
+            face.filter = CIFilter(name: defaultFilterName)
+            face.overshoot = defaultOvershoot
+            return face
         }
-        else {
-            var newFace = facePixellator.faces[index]
-            newFace.setFilter(name: filterName == "" ? nil : filterName, parameter: [filterParameterName : currentParameterValue])
-            newFace.overshoot = overshootAmount
-            facePixellator.faces[index] = newFace
-        }
+        
     }
+        
+    private var previewImageCache = [Int:UIImage]()
     
-    public func previewImage(for index: Int = 0) -> UIImage {
+    public func cachedPreviewImage(for index: Int) -> UIImage? {
+        return previewImageCache[index]
+    }
+
+    public func previewImage(for index: Int = -1) -> UIImage {
+        let index = index >= 0 ? index : currentFace
         if facePixellator.faces.indices.contains(index) {
-            let face = facePixellator.faces [index]
+            let face = facePixellator.faces[index]
             let image = UIImage(ciImage: facePixellator.previewImage(for: face))
+            previewImageCache[index] = image
             return image
         }
         return UIImage()

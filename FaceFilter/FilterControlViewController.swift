@@ -17,28 +17,48 @@ class FilterControlViewController: UIViewController {
     @IBOutlet private weak var overshootAmountLabel: UILabel!
     @IBOutlet private weak var overshootAmount: UISlider!
 
-    var faceCount = 0
-    var currentFace = -1
-    var previewRunning = false
-    var previewIsObsolete = false
-    
-    var imageViewController : PreviewImageViewController?
+    var imageViewController : PreviewImageViewController? {
+        didSet {
+            let index = imageViewController?.pageIndex
+            model.currentFace = index ?? -1
+            syncModel2UI()
+        }
+    }
+    var nextImageViewController: PreviewImageViewController?
     
     private let model = AppModel.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        syncModel2UI()
+    }
+    
+    func syncModel2UI() {
         filterSegmentControl.selectedSegmentIndex = model.currentFilterIndex
-        filterSelected(filterSegmentControl)
-        faceCount = model.detectedFaceRect.count
+
+        if let parameterValue = model.currentParameterValue {
+            inputScale.isHidden = false
+            inputScale.value = parameterValue
+            inputScaleLabel.isHidden = false
+            inputScaleLabel.text = "\(parameterValue)"
+        }
+        else {
+            inputScale.isHidden = true
+            inputScaleLabel.isHidden = true
+        }
+
+        let overshoot = model.overshootAmount
+        overshootAmount.value = Float(overshoot)
+        overshootAmountLabel.text = "\(Int(overshoot * 100))%"
     }
     
     @IBAction func scaleChanged(_ sender: UISlider) {
-        inputScale.value = floor(inputScale.value)
-        inputScaleLabel.text = "\(inputScale.value)"
-        if model.currentParameterValue != inputScale.value {
-            model.currentParameterValue = inputScale.value
+        let newValue = floor(inputScale.value)
+        inputScale.value = newValue
+        inputScaleLabel.text = "\(newValue)"
+        if model.currentParameterValue != newValue {
+            model.currentParameterValue = newValue
             refreshPreview()
         }
     }
@@ -48,42 +68,19 @@ class FilterControlViewController: UIViewController {
         overshootAmount.value = newValue
         overshootAmountLabel.text = "\(Int(newValue * 100))%"
         if model.overshootAmount != CGFloat(newValue) {
-            model.overshootAmount = CGFloat(overshootAmount.value)
+            model.overshootAmount = CGFloat(newValue)
             refreshPreview()
         }
     }
 
     @IBAction func filterSelected(_ sender: UISegmentedControl) {
         model.currentFilterIndex = sender.selectedSegmentIndex
-        inputScale.maximumValue = model.allowedFilter[model.currentFilterIndex].maximumValue
-        inputScale.minimumValue = model.allowedFilter[model.currentFilterIndex].minimumValue
-        inputScale.value = model.currentParameterValue
-        inputScaleLabel.text = "\(inputScale.value)"
-        overshootAmount.value = Float(model.overshootAmount)
-        overshootAmountLabel.text = "\(Int(overshootAmount.value * 100))%"
-
+        syncModel2UI()
         refreshPreview()
     }
     
     func refreshPreview() {
-        if !previewRunning {
-            previewRunning = true
-            model.syncSettings(for: currentFace)
-            DispatchQueue.global(qos: .userInitiated).async {
-                let previewImage = self.model.previewImage()
-                DispatchQueue.main.async {
-                    self.imageViewController?.image = previewImage
-                    self.previewRunning = false
-                    if self.previewIsObsolete {
-                        self.previewIsObsolete = false
-                        self.refreshPreview()
-                    }
-                }
-            }
-        }
-        else {
-            previewIsObsolete = true
-        }
+        imageViewController?.refreshImage()
     }
     
     @IBAction func dismiss() {
@@ -99,7 +96,9 @@ class FilterControlViewController: UIViewController {
             if let vc = segue.destination as? UIPageViewController {
                 vc.dataSource = self
                 vc.delegate = self
-                vc.setViewControllers([previewViewController(at: 0)!], direction: .forward, animated: false, completion: nil)
+                let childVC = previewViewController(at: 0)!
+                imageViewController = childVC as? PreviewImageViewController
+                vc.setViewControllers([childVC], direction: .forward, animated: false, completion: nil)
             }
         }
     }
@@ -108,14 +107,13 @@ class FilterControlViewController: UIViewController {
     func previewViewController(at index: Int) -> UIViewController? {
         let imageVC = storyboard?.instantiateViewController(identifier: "PreviewImageViewController") as! PreviewImageViewController
         imageVC.pageIndex = index
-        imageVC.image = model.previewImage(for: index)
-        
         return imageVC
     }
 }
 
 
 extension FilterControlViewController: UIPageViewControllerDataSource, UIPageViewControllerDelegate {
+
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let beforeVC = viewController as? PreviewImageViewController else { return nil }
         
@@ -131,7 +129,7 @@ extension FilterControlViewController: UIPageViewControllerDataSource, UIPageVie
         guard let afterVC = viewController as? PreviewImageViewController else { return nil }
 
         let index = afterVC.pageIndex + 1
-        if index >= faceCount {
+        if index >= model.numberOfFaces {
             return nil
         }
 
@@ -139,7 +137,7 @@ extension FilterControlViewController: UIPageViewControllerDataSource, UIPageVie
     }
     
     func presentationCount(for pageViewController: UIPageViewController) -> Int {
-        return faceCount
+        return model.numberOfFaces
     }
     
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
@@ -148,6 +146,12 @@ extension FilterControlViewController: UIPageViewControllerDataSource, UIPageVie
     
     func pageViewController(_ pageViewController: UIPageViewController, willTransitionTo pendingViewControllers: [UIViewController]) {
         guard let currentVC = pendingViewControllers.first as? PreviewImageViewController else { return }
-        imageViewController = currentVC
+        nextImageViewController = currentVC
+    }
+    
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+        if completed {
+            imageViewController = nextImageViewController
+        }
     }
 }
