@@ -1,0 +1,7 @@
+// Overridable settings with some defaults
+
+PRODUCT_BUNDLE_IDENTIFIER = com.your-company.Face-Filter
+DEVELOPMENT_TEAM = None
+CODE_SIGN_STYLE = Automatic
+
+#include? "LocalConfig.xcconfig"

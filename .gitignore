@@ -2,3 +2,5 @@
 *.m4v
 *.jpg
 AppIcon/**
+testpictures/**
+LocalConfig.xcconfig
