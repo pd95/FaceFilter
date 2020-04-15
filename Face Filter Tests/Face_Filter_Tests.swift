@@ -62,5 +62,8 @@ class Face_Filter_Tests: XCTestCase {
         let result = pixellator.resultImage()
         let resultUiImage = UIImage(ciImage: result)
 
+        let overview = pixellator.overviewImage(singleFaceWidth: 100)
+        let overviewSize = overview.extent.size
+        XCTAssert(overviewSize.width == 300 && overviewSize.height == 500, "Unexpected size for composed overview image: \(overviewSize)")
     }
 }

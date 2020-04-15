@@ -62,7 +62,7 @@ public class FacePixellator {
     
     
     // Return a CIImage for the given face with the pixellation filter applied
-    public func previewImage(for face: FilteredFace) -> CIImage {
+    public func previewImage(for face: FilteredFace, areaIncreaseFactor: CGFloat = 0.4, areaIncreaseOffset: CGFloat = 0.1) -> CIImage {
         // Calculate face position in image coordinates
         let size = inputImage.extent.size
         let faceRect = CGRect(
@@ -73,9 +73,8 @@ public class FacePixellator {
         )
 
         // For the preview the crop area must be slightly bigger
-        let f : CGFloat = 0.4
-        let dx = -faceRect.size.width * (ceil((face.overshoot + 0.01)/f) * f + 0.1)
-        let dy = -faceRect.size.height * (ceil((face.overshoot + 0.01)/f) * f + 0.1)
+        let dx = -faceRect.size.width * (ceil((face.overshoot + 0.01)/areaIncreaseFactor) * areaIncreaseFactor + areaIncreaseOffset)
+        let dy = -faceRect.size.height * (ceil((face.overshoot + 0.01)/areaIncreaseFactor) * areaIncreaseFactor + areaIncreaseOffset)
         let cropRect = faceRect.insetBy(dx: dx, dy: dy)
 
         // In the cropped image the face somewhere else
@@ -141,6 +140,35 @@ public class FacePixellator {
             }
         }
         outputImage = outputImage.cropped(to: inputImage.extent)
+
+        return outputImage
+    }
+    
+    public func overviewImage(singleFaceWidth faceWidth: CGFloat = 200) -> CIImage {
+        let numFaces = faces.count
+        let numColumns = Int(Float(numFaces).squareRoot())
+        let numRows = Int(ceil(Float(numFaces) / Float(numColumns)))
+
+        let outputSize = CGSize(width: CGFloat(numColumns) * faceWidth, height: CGFloat(numRows) * faceWidth)
+        var outputImage : CIImage = CIImage(color: .black)
+        for (index, face) in faces.enumerated() {
+            
+            let faceImage = previewImage(for: face, areaIncreaseFactor: 0.2)
+            let faceSize = faceImage.extent.size
+
+            let x = index / numRows
+            let y = numRows - 1 - index % numRows
+
+            let processedImage = faceImage
+                .transformed(by: .init(scaleX: faceWidth / faceSize.width, y: faceWidth / faceSize.height))
+                .transformed(by: .init(translationX: CGFloat(x) * faceWidth, y: CGFloat(y) * faceWidth))
+
+            // Compose filtered and original image
+            outputImage = processedImage.composited(over: outputImage)
+        }
+        
+        outputImage = outputImage
+            .cropped(to: CGRect(origin: .zero, size: outputSize))
 
         return outputImage
     }
