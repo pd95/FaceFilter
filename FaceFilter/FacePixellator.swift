@@ -175,11 +175,11 @@ public class FacePixellator {
     
     public func overviewImage(singleFaceWidth faceWidth: CGFloat = 200) -> CIImage {
         let numFaces = faces.count
-        let numColumns = Int(Float(numFaces).squareRoot())
+        let numColumns = max(Int(Float(numFaces).squareRoot()), 1)
         let numRows = Int(ceil(Float(numFaces) / Float(numColumns)))
 
         let outputSize = CGSize(width: CGFloat(numColumns) * faceWidth, height: CGFloat(numRows) * faceWidth)
-        var outputImage : CIImage = CIImage(color: .black)
+        var outputImage : CIImage = CIImage(color: CIColor(color: UIColor.secondarySystemBackground))
         for (index, face) in faces.enumerated() {
             
             let faceImage = previewImage(for: face, areaIncreaseFactor: 0.2)
