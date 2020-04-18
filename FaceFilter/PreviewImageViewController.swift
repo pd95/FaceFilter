@@ -45,8 +45,6 @@ class PreviewImageViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        print("PreviewImageViewController \(pageIndex): viewDidLoad")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +55,5 @@ class PreviewImageViewController: UIViewController {
         if cachedImage == nil {
             refreshImage()
         }
-        print("PreviewImageViewController \(pageIndex): viewWillAppear")
     }
 }
