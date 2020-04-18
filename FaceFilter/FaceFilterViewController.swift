@@ -24,7 +24,7 @@ class FaceFilterViewController: UIViewController {
         didSet {
             overviewSwitch.isOn = showOverview
             if oldValue != showOverview {
-                refreshImage(resetScrollView: true)
+                refreshImage(resetScrollView: true, fitToWidth: showOverview)
             }
         }
     }
@@ -66,10 +66,10 @@ class FaceFilterViewController: UIViewController {
 
 
     // MARK: - View controller main functionality
-    func resetScrollView(for image: UIImage) {
-        let svHeight = scrollView.bounds.size.height
-        let imHeight = image.size.height
-        let scale = svHeight / imHeight
+    func resetScrollView(for image: UIImage, fitToWidth: Bool = false) {
+        let svSize = scrollView.bounds.size
+        let imSize = image.size
+        let scale = fitToWidth ? svSize.width / imSize.width : svSize.height / imSize.height
         scrollView.zoomScale = scale
         scrollView.contentOffset = .zero
     }
@@ -94,6 +94,7 @@ class FaceFilterViewController: UIViewController {
 
             let resultImage = self.model.resultImage()
             DispatchQueue.main.async {
+                self.showOverview = false
                 self.showImage(resultImage)
                 self.filterOptionsButton.isEnabled =  self.model.numberOfFaces > 0
             }
@@ -101,7 +102,7 @@ class FaceFilterViewController: UIViewController {
     }
 
     // Updates the current image in the background, applying the filter and displaying the result
-    func refreshImage(resetScrollView: Bool = false) {
+    func refreshImage(resetScrollView: Bool = false, fitToWidth: Bool = false) {
         guard !pickingImage else { return }
 
         DispatchQueue.global(qos: .background).async {
@@ -110,7 +111,7 @@ class FaceFilterViewController: UIViewController {
             DispatchQueue.main.async {
                 self.imageView.image = resultImage
                 if resetScrollView {
-                    self.resetScrollView(for: resultImage)
+                    self.resetScrollView(for: resultImage, fitToWidth: fitToWidth)
                 }
             }
         }
