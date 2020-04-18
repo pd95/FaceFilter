@@ -28,7 +28,25 @@ public class AppModel {
     
     private init() {
     }
+
+    private var defaultFilterName : String {
+        get {
+            UserDefaults.standard.value(forKey: DefaultKeys.currentFilter) as? String ?? "CIPixellate"
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: DefaultKeys.currentFilter)
+        }
+    }
     
+    private var defaultOvershoot: CGFloat {
+        get {
+            UserDefaults.standard.value(forKey: DefaultKeys.overshootAmount) as? CGFloat ?? 0.0
+        }
+        set {
+            UserDefaults.standard.set(newValue, forKey: DefaultKeys.overshootAmount)
+        }
+    }
+
     // MARK: - Current filter selection and parameter handling
     let allowedFilter = [
         FilterSelection(filterName: "CIGaussianBlur", parameterName: "inputRadius", defaultValue: 10, minimumValue: 0, maximumValue: 100),
@@ -53,7 +71,9 @@ public class AppModel {
                     return face
                 }
             }
-            UserDefaults.standard.set(filterName, forKey: DefaultKeys.currentFilter)
+            if !filterName.isEmpty {
+                defaultFilterName = filterName
+            }
         }
     }
 
@@ -77,7 +97,6 @@ public class AppModel {
         }
         set {
             facePixellator.faces[currentFace].filter?.setValue(newValue, forKey: filterParameterName)
-//            UserDefaults.standard.set(newValue, forKey: filterName)
         }
     }
     
@@ -104,7 +123,7 @@ public class AppModel {
             $0.boundingBox.contains(location)
         }
         if existingFace == nil {
-            facePixellator.addFace(at: location)
+            facePixellator.addFace(at: location, filter: CIFilter(name: defaultFilterName))
         }
     }
     
@@ -117,11 +136,9 @@ public class AppModel {
     // This method prepares the given UIImage and extracts the location (=Rects) of the faces
     public func detectFaces(in image: UIImage) {
         facePixellator.set(uiImage: image)
-        facePixellator.detectFaces()
+        facePixellator.detectFaces(filter: CIFilter(name: defaultFilterName))
         
         // Applying default values for filter and overshoot
-        let defaultFilterName = UserDefaults.standard.value(forKey: DefaultKeys.currentFilter) as? String ?? "CIPixellate"
-        let defaultOvershoot = UserDefaults.standard.value(forKey: DefaultKeys.overshootAmount) as? CGFloat ?? 0.0
         facePixellator.faces = facePixellator.faces.map {
             var face = $0
             face.filter = CIFilter(name: defaultFilterName)

@@ -44,7 +44,7 @@ public class FacePixellator {
         }
     }
 
-    public func addFace(at location: CGPoint) {
+    public func addFace(at location: CGPoint, filter: CIFilter? = nil) {
 
         // Try to evaluate the average face rect
         var avgWidth: CGFloat = 0
@@ -71,11 +71,11 @@ public class FacePixellator {
         // Clamp to the visible area
         boundingBox = boundingBox.intersection(CGRect(x: 0, y: 0, width: 1, height: 1))
 
-        faces.append(FilteredFace(boundingBox: boundingBox, filter: CIFilter.pixellate()))
+        faces.append(FilteredFace(boundingBox: boundingBox, filter: filter ?? CIFilter.pixellate()))
     }
 
     // Use Vision framework to detect faces in the image
-    public func detectFaces() {
+    public func detectFaces(filter: CIFilter? = nil) {
         let faceDetection = VNDetectFaceRectanglesRequest()
         let faceDetectionRequest = VNImageRequestHandler(ciImage: inputImage, options: [:])
         try? faceDetectionRequest.perform([faceDetection])
@@ -83,7 +83,7 @@ public class FacePixellator {
             if !results.isEmpty {
                 for face in results {
                     // Create Face structure with preview image
-                    faces.append(FilteredFace(boundingBox: face.boundingBox, filter: CIFilter.pixellate()))
+                    faces.append(FilteredFace(boundingBox: face.boundingBox, filter: filter ?? CIFilter.pixellate()))
                 }
             }
         }
