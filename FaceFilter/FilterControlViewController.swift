@@ -96,6 +96,7 @@ class FilterControlViewController: UIViewController {
             if let vc = segue.destination as? UIPageViewController {
                 vc.dataSource = self
                 vc.delegate = self
+                vc.view.backgroundColor = .systemGray4
                 let childVC = previewViewController(at: 0)!
                 imageViewController = childVC as? PreviewImageViewController
                 vc.setViewControllers([childVC], direction: .forward, animated: false, completion: nil)
