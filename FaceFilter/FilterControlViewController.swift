@@ -42,6 +42,8 @@ class FilterControlViewController: UIViewController {
             inputScale.value = parameterValue
             inputScaleLabel.isHidden = false
             inputScaleLabel.text = "\(parameterValue)"
+            inputScale.minimumValue = model.filterMinimumValue
+            inputScale.maximumValue = model.filterMaximumValue
         }
         else {
             inputScale.isHidden = true

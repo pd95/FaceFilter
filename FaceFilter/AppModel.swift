@@ -49,7 +49,7 @@ public class AppModel {
 
     // MARK: - Current filter selection and parameter handling
     let allowedFilter = [
-        FilterSelection(filterName: "CIGaussianBlur", parameterName: "inputRadius", defaultValue: 10, minimumValue: 0, maximumValue: 100),
+        FilterSelection(filterName: "CIGaussianBlur", parameterName: "inputRadius", defaultValue: 10, minimumValue: 0, maximumValue: 20),
         FilterSelection(filterName: "CIPixellate", parameterName: "inputScale", defaultValue: 20, minimumValue: 1, maximumValue: 100),
         FilterSelection(filterName: "CIHexagonalPixellate", parameterName: "inputScale", defaultValue: 20, minimumValue: 1, maximumValue: 100),
         FilterSelection(filterName: "", parameterName: "", defaultValue: 1, minimumValue: 1, maximumValue: 1)
@@ -83,6 +83,14 @@ public class AppModel {
 
     public var filterParameterName: String {
         allowedFilter[currentFilterIndex].parameterName
+    }
+
+    public var filterMaximumValue: Float {
+        allowedFilter[currentFilterIndex].maximumValue
+    }
+
+    public var filterMinimumValue: Float {
+        allowedFilter[currentFilterIndex].minimumValue
     }
 
     public var numberOfFaces: Int {
