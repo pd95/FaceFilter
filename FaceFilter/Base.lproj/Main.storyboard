@@ -29,9 +29,17 @@
                                             <outletCollection property="gestureRecognizers" destination="vt0-ha-zOu" appends="YES" id="TQ1-kf-Ftk"/>
                                         </connections>
                                     </imageView>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="qAU-hX-Bny">
+                                        <rect key="frame" x="261" y="8" width="51" height="31"/>
+                                        <connections>
+                                            <action selector="toggleOverview:" destination="BYZ-38-t0r" eventType="valueChanged" id="oaN-5C-lEk"/>
+                                        </connections>
+                                    </switch>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="FRS-F4-IFS" firstAttribute="leading" secondItem="P08-SE-dDX" secondAttribute="leading" id="0TY-nW-9ro"/>
+                                    <constraint firstItem="qAU-hX-Bny" firstAttribute="top" secondItem="adI-H4-hli" secondAttribute="top" constant="8" id="6rC-Nw-UmU"/>
+                                    <constraint firstItem="adI-H4-hli" firstAttribute="trailing" secondItem="qAU-hX-Bny" secondAttribute="trailing" constant="10" id="FU2-Rw-ve5"/>
                                     <constraint firstItem="FRS-F4-IFS" firstAttribute="bottom" secondItem="P08-SE-dDX" secondAttribute="bottom" id="HJS-js-KFn"/>
                                     <constraint firstItem="FRS-F4-IFS" firstAttribute="top" secondItem="P08-SE-dDX" secondAttribute="top" id="Nrh-di-fVz"/>
                                     <constraint firstItem="FRS-F4-IFS" firstAttribute="trailing" secondItem="P08-SE-dDX" secondAttribute="trailing" id="udc-Xz-gBk"/>
@@ -81,6 +89,7 @@
                     <connections>
                         <outlet property="filterOptionsButton" destination="cg4-c0-18I" id="dNP-Sz-NVg"/>
                         <outlet property="imageView" destination="FRS-F4-IFS" id="xG2-7L-gIM"/>
+                        <outlet property="overviewSwitch" destination="qAU-hX-Bny" id="59N-o1-FoD"/>
                         <outlet property="scrollView" destination="2ck-vj-aSQ" id="LVp-8N-COR"/>
                     </connections>
                 </viewController>

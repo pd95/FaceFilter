@@ -15,10 +15,20 @@ class FaceFilterViewController: UIViewController {
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet weak var filterOptionsButton: UIBarButtonItem!
+    @IBOutlet weak var overviewSwitch: UISwitch!
 
     private let model = AppModel.shared
     private var pickingImage = false
 
+    private var showOverview = false {
+        didSet {
+            overviewSwitch.isOn = showOverview
+            if oldValue != showOverview {
+                refreshImage(resetScrollView: true)
+            }
+        }
+    }
+    
     private lazy var picker: UIImagePickerController = {
         let picker = UIImagePickerController()
         picker.delegate = self
@@ -56,17 +66,20 @@ class FaceFilterViewController: UIViewController {
 
 
     // MARK: - View controller main functionality
+    func resetScrollView(for image: UIImage) {
+        let svHeight = scrollView.bounds.size.height
+        let imHeight = image.size.height
+        let scale = svHeight / imHeight
+        scrollView.zoomScale = scale
+        scrollView.contentOffset = .zero
+    }
     
     // Displays the given image in the UIImageView and adjusts the UIScrollView
     func showImage(_ image: UIImage?) {
         imageView.contentMode = .center
         imageView.image = image
         if let image = image {
-            let svHeight = scrollView.bounds.size.height
-            let imHeight = image.size.height
-            let scale = svHeight / imHeight
-            scrollView.zoomScale = scale
-            scrollView.contentOffset = .zero
+            resetScrollView(for: image)
         }
     }
 
@@ -88,15 +101,25 @@ class FaceFilterViewController: UIViewController {
     }
 
     // Updates the current image in the background, applying the filter and displaying the result
-    func refreshImage() {
+    func refreshImage(resetScrollView: Bool = false) {
+        guard !pickingImage else { return }
+
         DispatchQueue.global(qos: .background).async {
-            let resultImage = self.model.resultImage()
+            
+            let resultImage = self.showOverview ? self.model.overviewImage() :  self.model.resultImage()
             DispatchQueue.main.async {
                 self.imageView.image = resultImage
+                if resetScrollView {
+                    self.resetScrollView(for: resultImage)
+                }
             }
         }
     }
 
+    @IBAction func toggleOverview(_ sender: UISwitch) {
+        showOverview = sender.isOn
+    }
+    
     // Action used to trigger the display of the Image Picker
     @IBAction func chooseImage() {
         pickingImage = true

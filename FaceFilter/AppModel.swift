@@ -144,6 +144,11 @@ public class AppModel {
         return UIImage()
     }
     
+    public func overviewImage() -> UIImage {
+        let image = UIImage(ciImage: facePixellator.overviewImage())
+        return image
+    }
+    
     public func resultImage() -> UIImage {
         let image = UIImage(ciImage: facePixellator.resultImage())
         return image
