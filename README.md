@@ -1,24 +1,24 @@
 # Face Filter
 
-A simple, quick and dirty iPhone prototype to process an image and pixelate the faces.
+A simple proof-of-concept prototype for iPhone to process an image and pixelate/blur the faces detected.
 
-Based on Apples Vision framework the app detects faces in the image (load from your photo library) and applies a Core Image filter (Gaussian blur, square or hexagonal pixellate) onto the detected "face areas". 
+To do its job, the app relies on Apples "Vision" framework to detect faces in the image and then applies Core Image filters (Gaussian blur, square or hexagonal pixellate) onto them. If not all faces have been detected, a long-press gesture allows the user to quickly add one. 
+For each face the filter can be adjusted. The resulting filtered image can then be shared.
 
-The resulting filtered image can then be shared.
+## Features
 
-## Possible improvements
+- Import from photo library or directly from camera
+- Automatic face detection using Vision framework
+- Add a face manually using long-press gesture
+- Filter configuration for each face
+- Overview image showing "faces only"
+- Share the resulting image directly from the app or store it in the photo library
+- Basic photo editing extension integrated. (=does not yet provide all the configuration features)
 
-This is not a finished app. It is a first prototype. 
-There are various ideas for improvement:
-
-- "live" filter configuration instead of the modal sheet
-- manual adjustments (e.g. if a face has not or only partially been detected)
-- rewrite as a photo editing extension
-- ...
 
 ## How to build
 
-1. Install Xcode and open the project `FaceFilter.codeproj`
+1. Install Xcode and open the project `FaceFilter.xcodeproj`
 
 2. Choose a simulator and press "run"  
    (You will have to add images to the iOS Simulator using drag & drop, the camera is not available here.)
@@ -30,3 +30,8 @@ If you want to develop you can create a `LocalConfig.xcconfig` file to set `PROD
 ## Demo
 
 ![Demo](./Demo-01.gif)
+
+## Acknowledgement
+
+- Original app idea by [Yannick Weiss](https://github.com/yene)
+- Demo photo by [Naassom Azevedo on Unsplash](https://unsplash.com/photos/Q_Sei-TqSlc)
