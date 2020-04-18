@@ -14,6 +14,7 @@ class FaceFilterViewController: UIViewController {
     
     @IBOutlet var scrollView: UIScrollView!
     @IBOutlet var imageView: UIImageView!
+    @IBOutlet weak var shareButton: UIBarButtonItem!
     @IBOutlet weak var filterOptionsButton: UIBarButtonItem!
     @IBOutlet weak var overviewSwitch: UISwitch!
 
@@ -51,7 +52,7 @@ class FaceFilterViewController: UIViewController {
     public override func prepare(for segue: UIStoryboardSegue, sender: Any?)
     {
         if segue.identifier == "showFilterControl" {
-            // register us as PresentationController delegate to ensure we get notifed on modal dismissal
+            // register us as PresentationController delegate to ensure we get notified on modal dismissal
             let navigationController = segue.destination as! UINavigationController
             if #available(iOS 13.0, *) {
                 // Modal Dismiss iOS 13
@@ -78,15 +79,18 @@ class FaceFilterViewController: UIViewController {
     func showImage(_ image: UIImage?) {
         imageView.contentMode = .center
         imageView.image = image
-        if let image = image {
-            resetScrollView(for: image)
-        }
+        let hasFaces = model.numberOfFaces > 0
+        shareButton.isEnabled = hasFaces
+        filterOptionsButton.isEnabled = hasFaces
+        overviewSwitch.isEnabled = hasFaces
     }
 
 
     // Processes the given image in the background, applies the filter and displays the result
     func processImage(_ image: UIImage) {
+        self.showOverview = false
         showImage(image)
+        self.resetScrollView(for: image)
         DispatchQueue.global(qos: .background).async {
 
             // The first steps are only needed once
@@ -94,9 +98,7 @@ class FaceFilterViewController: UIViewController {
 
             let resultImage = self.model.resultImage()
             DispatchQueue.main.async {
-                self.showOverview = false
                 self.showImage(resultImage)
-                self.filterOptionsButton.isEnabled =  self.model.numberOfFaces > 0
             }
         }
     }
@@ -109,7 +111,7 @@ class FaceFilterViewController: UIViewController {
             
             let resultImage = self.showOverview ? self.model.overviewImage() :  self.model.resultImage()
             DispatchQueue.main.async {
-                self.imageView.image = resultImage
+                self.showImage(resultImage)
                 if resetScrollView {
                     self.resetScrollView(for: resultImage, fitToWidth: fitToWidth)
                 }
@@ -211,9 +213,6 @@ extension FaceFilterViewController: UIImagePickerControllerDelegate, UINavigatio
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         pickingImage = false
-        imageView.contentMode = .topLeft
-        imageView.image = UIImage(named: "Choose-Here")
-        filterOptionsButton.isEnabled = false
         picker.dismiss(animated: true, completion: nil)
     }
 }
