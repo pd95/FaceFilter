@@ -88,6 +88,7 @@ class FaceFilterViewController: UIViewController {
 
     // Processes the given image in the background, applies the filter and displays the result
     func processImage(_ image: UIImage) {
+        self.model.reset()
         self.showOverview = false
         showImage(image)
         self.resetScrollView(for: image)

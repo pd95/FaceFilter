@@ -107,11 +107,15 @@ public class AppModel {
             facePixellator.addFace(at: location)
         }
     }
+    
+    public func reset() {
+        facePixellator = FacePixellator()
+        currentFace = -1
+        previewImageCache.removeAll()
+    }
 
     // This method prepares the given UIImage and extracts the location (=Rects) of the faces
     public func detectFaces(in image: UIImage) {
-        facePixellator = FacePixellator()
-        previewImageCache.removeAll()
         facePixellator.set(uiImage: image)
         facePixellator.detectFaces()
         
