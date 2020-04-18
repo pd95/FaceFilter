@@ -40,6 +40,7 @@ class Face_Filter_Tests: XCTestCase {
         XCTAssertNotNil(resultImage)
 
         // Test face detection on result image: no faces should be detected
+        model.reset()
         model.detectFaces(in: resultImage)
         XCTAssert(model.numberOfFaces == 0, "Unexpected count of detected faces: \(model.numberOfFaces)")
     }
