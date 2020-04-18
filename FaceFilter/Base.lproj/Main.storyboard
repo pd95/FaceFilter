@@ -18,12 +18,16 @@
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" contentInsetAdjustmentBehavior="never" minimumZoomScale="0.10000000000000001" maximumZoomScale="10" translatesAutoresizingMaskIntoConstraints="NO" id="2ck-vj-aSQ">
                                 <rect key="frame" x="0.0" y="44" width="320" height="524"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FRS-F4-IFS">
+                                    <imageView clipsSubviews="YES" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="FRS-F4-IFS">
                                         <rect key="frame" x="0.0" y="0.0" width="1200" height="823"/>
+                                        <gestureRecognizers/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="1200" placeholder="YES" id="RJa-Zv-L0e"/>
                                             <constraint firstAttribute="height" constant="823" placeholder="YES" id="dhP-Iq-Uqy"/>
                                         </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="vt0-ha-zOu" appends="YES" id="TQ1-kf-Ftk"/>
+                                        </connections>
                                     </imageView>
                                 </subviews>
                                 <constraints>
@@ -81,8 +85,13 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <pongPressGestureRecognizer allowableMovement="10" minimumPressDuration="0.5" id="vt0-ha-zOu">
+                    <connections>
+                        <action selector="longpressOccured:" destination="BYZ-38-t0r" id="R3z-e3-H6M"/>
+                    </connections>
+                </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1136.25" y="113.02816901408451"/>
+            <point key="canvasLocation" x="908" y="113"/>
         </scene>
         <!--Filter Control View Controller-->
         <scene sceneID="cWi-fY-I44">
@@ -199,7 +208,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="c5Z-1F-gy5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3236.25" y="111.97183098591549"/>
+            <point key="canvasLocation" x="2552" y="113"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="4NP-SN-qO7">
@@ -235,7 +244,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SY1-zb-2jq" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2238.75" y="111.97183098591549"/>
+            <point key="canvasLocation" x="1729" y="112"/>
         </scene>
         <!--Page View Controller-->
         <scene sceneID="0Zg-nO-xh1">
@@ -243,7 +252,7 @@
                 <pageViewController storyboardIdentifier="PageViewController" autoresizesArchivedViewToFullSize="NO" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="max" doubleSided="YES" id="co0-lP-Abn" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xp5-hy-hAn" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4283" y="92"/>
+            <point key="canvasLocation" x="3351" y="112"/>
         </scene>
         <!--Preview Image View Controller-->
         <scene sceneID="aaF-x6-IKs">
@@ -259,7 +268,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uxA-SN-PLC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5068" y="112"/>
+            <point key="canvasLocation" x="4061" y="113"/>
         </scene>
     </scenes>
     <resources>

@@ -44,6 +44,35 @@ public class FacePixellator {
         }
     }
 
+    public func addFace(at location: CGPoint) {
+
+        // Try to evaluate the average face rect
+        var avgWidth: CGFloat = 0
+        var avgHeight: CGFloat = 0
+        faces.forEach { (face) in
+            avgWidth += face.boundingBox.width
+            avgHeight += face.boundingBox.height
+        }
+        
+        // If none was found: take a "sane" default
+        if avgWidth == 0 || avgHeight == 0 {
+            let size = inputImage.extent.size
+            avgWidth  = 1 / 10
+            avgHeight = size.width/size.height / 10
+        }
+        else {
+            avgWidth /= CGFloat(faces.count)
+            avgHeight /= CGFloat(faces.count)
+        }
+
+        // Create the bounding box
+        var boundingBox = CGRect(x: location.x - avgWidth / 2, y: location.y - avgHeight / 2, width: avgWidth, height: avgHeight)
+        
+        // Clamp to the visible area
+        boundingBox = boundingBox.intersection(CGRect(x: 0, y: 0, width: 1, height: 1))
+
+        faces.append(FilteredFace(boundingBox: boundingBox, filter: CIFilter.pixellate()))
+    }
 
     // Use Vision framework to detect faces in the image
     public func detectFaces() {

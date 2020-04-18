@@ -98,6 +98,15 @@ public class AppModel {
         let r = facePixellator.faces.map { $0.boundingBox }
         return r
     }
+    
+    public func addFace(at location: CGPoint) {
+        let existingFace = facePixellator.faces.first {
+            $0.boundingBox.contains(location)
+        }
+        if existingFace == nil {
+            facePixellator.addFace(at: location)
+        }
+    }
 
     // This method prepares the given UIImage and extracts the location (=Rects) of the faces
     public func detectFaces(in image: UIImage) {

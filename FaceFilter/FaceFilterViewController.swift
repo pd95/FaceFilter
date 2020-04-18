@@ -130,6 +130,23 @@ class FaceFilterViewController: UIViewController {
             self.present(activityVC, animated: true)
         }
     }
+
+    @IBAction func longpressOccured(_ sender: UILongPressGestureRecognizer) {
+        if sender.state == .began {
+
+            let view = sender.view!
+            let absoluteLocation = sender.location(in: view)
+            
+            // Translate the absolute coordinates into relative (with swapped Y axis)
+            let relativeLocation = absoluteLocation
+                .applying(.init(scaleX: 1 / view.bounds.size.width, y: -1 / view.bounds.size.height))
+                .applying(.init(translationX: 0.0, y: 1.0))
+            if !showOverview {
+                model.addFace(at: relativeLocation)
+                refreshImage()
+            }
+        }
+    }
 }
 
 
