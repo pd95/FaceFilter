@@ -20,6 +20,7 @@ class FaceFilterViewController: UIViewController {
 
     private let model = AppModel.shared
     private var pickingImage = false
+    private var scrollViewOffset = CGPoint.zero
 
     private var showOverview = false {
         didSet {
@@ -72,7 +73,7 @@ class FaceFilterViewController: UIViewController {
         let imSize = image.size
         let scale = fitToWidth ? svSize.width / imSize.width : svSize.height / imSize.height
         scrollView.zoomScale = scale
-        scrollView.contentOffset = .zero
+        scrollView.contentOffset = showOverview ? .zero : scrollViewOffset
     }
     
     // Displays the given image in the UIImageView and adjusts the UIScrollView
@@ -122,6 +123,9 @@ class FaceFilterViewController: UIViewController {
 
     @IBAction func toggleOverview(_ sender: UISwitch) {
         showOverview = sender.isOn
+        if showOverview {
+            scrollViewOffset = scrollView.contentOffset
+        }
     }
     
     // Action used to trigger the display of the Image Picker
