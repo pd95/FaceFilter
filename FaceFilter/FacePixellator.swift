@@ -66,11 +66,8 @@ public class FacePixellator {
         }
 
         // Create the bounding box
-        var boundingBox = CGRect(x: location.x - avgWidth / 2, y: location.y - avgHeight / 2, width: avgWidth, height: avgHeight)
+        let boundingBox = CGRect(x: location.x - avgWidth / 2, y: location.y - avgHeight / 2, width: avgWidth, height: avgHeight)
         
-        // Clamp to the visible area
-        boundingBox = boundingBox.intersection(CGRect(x: 0, y: 0, width: 1, height: 1))
-
         faces.append(FilteredFace(boundingBox: boundingBox, filter: filter ?? CIFilter.pixellate()))
     }
 
@@ -104,7 +101,24 @@ public class FacePixellator {
         // For the preview the crop area must be slightly bigger
         let dx = -faceRect.size.width * (ceil((face.overshoot + 0.01)/areaIncreaseFactor) * areaIncreaseFactor + areaIncreaseOffset)
         let dy = -faceRect.size.height * (ceil((face.overshoot + 0.01)/areaIncreaseFactor) * areaIncreaseFactor + areaIncreaseOffset)
-        let cropRect = faceRect.insetBy(dx: dx, dy: dy)
+        var cropRect = faceRect.insetBy(dx: dx, dy: dy)
+        
+        // Make sure the cropRect is fully visible, i.e. move the rect accordingly
+        if cropRect.minX < 0 {
+            cropRect.size.width -= cropRect.origin.x
+            cropRect.origin.x = 0
+        }
+        else if cropRect.maxX > size.width {
+            cropRect.origin.x = size.width - cropRect.width
+        }
+
+        if cropRect.minY < 0 {
+            cropRect.size.height -= cropRect.origin.y
+            cropRect.origin.y = 0
+        }
+        else if cropRect.maxY > size.height {
+            cropRect.origin.y = size.height - cropRect.height
+        }
 
         // In the cropped image the face somewhere else
         let previewOrigin = CGPoint(x: faceRect.origin.x - cropRect.origin.x, y: faceRect.origin.y - cropRect.origin.y)
