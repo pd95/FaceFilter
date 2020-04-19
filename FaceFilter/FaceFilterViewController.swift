@@ -91,6 +91,7 @@ class FaceFilterViewController: UIViewController {
     func processImage(_ image: UIImage) {
         self.model.reset()
         self.showOverview = false
+        self.scrollViewOffset = .zero
         showImage(image)
         self.resetScrollView(for: image)
         DispatchQueue.global(qos: .background).async {
